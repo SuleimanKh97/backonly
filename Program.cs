@@ -184,8 +184,8 @@ using (var scope = app.Services.CreateScope())
 
         try
         {
-            // Ensure database is created
-            await context.Database.EnsureCreatedAsync();
+            // Apply migrations
+            await context.Database.MigrateAsync();
 
             // Seed roles
             await SeedRolesAsync(roleManager);
