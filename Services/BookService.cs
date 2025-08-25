@@ -122,6 +122,44 @@ namespace LibraryManagementAPI.Services
         {
             try
             {
+                // Check if ISBN already exists
+                if (!string.IsNullOrEmpty(createBookDto.ISBN))
+                {
+                    var existingBook = await _context.Books.FirstOrDefaultAsync(b => b.ISBN == createBookDto.ISBN);
+                    if (existingBook != null)
+                    {
+                        throw new Exception($"A book with ISBN '{createBookDto.ISBN}' already exists.");
+                    }
+                }
+
+                // Check if foreign key references exist
+                if (createBookDto.AuthorId.HasValue)
+                {
+                    var author = await _context.Authors.FindAsync(createBookDto.AuthorId.Value);
+                    if (author == null)
+                    {
+                        throw new Exception($"Author with ID {createBookDto.AuthorId.Value} not found.");
+                    }
+                }
+
+                if (createBookDto.PublisherId.HasValue)
+                {
+                    var publisher = await _context.Publishers.FindAsync(createBookDto.PublisherId.Value);
+                    if (publisher == null)
+                    {
+                        throw new Exception($"Publisher with ID {createBookDto.PublisherId.Value} not found.");
+                    }
+                }
+
+                if (createBookDto.CategoryId.HasValue)
+                {
+                    var category = await _context.Categories.FindAsync(createBookDto.CategoryId.Value);
+                    if (category == null)
+                    {
+                        throw new Exception($"Category with ID {createBookDto.CategoryId.Value} not found.");
+                    }
+                }
+
                 var book = new Book
                 {
                     Title = createBookDto.Title,

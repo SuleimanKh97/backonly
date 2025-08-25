@@ -65,9 +65,14 @@ namespace LibraryManagementAPI.Controllers
             }
             catch (Exception ex)
             {
+                // Log the full exception for debugging
+                Console.WriteLine($"Book creation error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                
                 return BadRequest(new { 
                     message = "An error occurred while creating the book", 
-                    details = ex.Message 
+                    details = ex.Message,
+                    suggestion = "Please check if the ISBN is unique and all referenced IDs (Author, Publisher, Category) exist."
                 });
             }
         }
