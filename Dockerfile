@@ -8,7 +8,7 @@ WORKDIR /src
 COPY ["LibraryManagementAPI.csproj", "./"]
 RUN dotnet restore "LibraryManagementAPI.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src"
 RUN dotnet build "LibraryManagementAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish

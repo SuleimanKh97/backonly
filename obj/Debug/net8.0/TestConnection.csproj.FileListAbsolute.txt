@@ -1,0 +1,6 @@
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.csproj.AssemblyReference.cache
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.AssemblyInfoInputs.cache
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.AssemblyInfo.cs
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.csproj.CoreCompileInputs.cache
+C:\Users\ENG.K\Documents\LibraryManagementAPI\backonly\obj\Debug\net8.0\TestConnection.sourcelink.json

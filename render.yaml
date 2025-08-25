@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: library-management-api
+    env: docker
+    plan: free
+    buildCommand: docker build -t library-management-api .
+    startCommand: docker run -p $PORT:80 library-management-api
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT

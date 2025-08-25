@@ -49,8 +49,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.IsNewRelease).HasDefaultValue(false);
                 entity.Property(e => e.RatingCount).HasDefaultValue(0);
                 entity.Property(e => e.ViewCount).HasDefaultValue(0);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.Books)
@@ -86,8 +86,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.NameArabic).HasMaxLength(100);
                 entity.Property(e => e.Nationality).HasMaxLength(50);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Name);
             });
@@ -102,8 +102,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.Email).HasMaxLength(100);
                 entity.Property(e => e.Website).HasMaxLength(200);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Name);
             });
@@ -116,8 +116,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.NameArabic).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Icon).HasMaxLength(50);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Name);
             });
@@ -130,7 +130,7 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.ImageType).HasDefaultValue(ImageType.Gallery);
                 entity.Property(e => e.DisplayOrder).HasDefaultValue(0);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.BookImages)
@@ -149,8 +149,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.CustomerEmail).HasMaxLength(100);
                 entity.Property(e => e.Status).HasDefaultValue(InquiryStatus.Pending);
                 entity.Property(e => e.WhatsAppMessageSent).HasDefaultValue(false);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.BookInquiries)
@@ -173,7 +173,7 @@ namespace LibraryManagementAPI.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.SettingKey).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Description).HasMaxLength(255);
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.SettingKey).IsUnique();
             });
@@ -184,8 +184,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 
             // Configure Quiz entity
@@ -201,8 +201,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.PassingScore).HasDefaultValue(60);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 entity.Property(e => e.IsPublic).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Creator)
                     .WithMany(p => p.CreatedQuizzes)
@@ -223,8 +223,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.Points).HasDefaultValue(1);
                 entity.Property(e => e.OrderIndex).HasDefaultValue(0);
                 entity.Property(e => e.Type).HasDefaultValue(QuestionType.MultipleChoice);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Quiz)
                     .WithMany(p => p.Questions)
@@ -243,8 +243,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.OptionTextArabic);
                 entity.Property(e => e.IsCorrect).HasDefaultValue(false);
                 entity.Property(e => e.OrderIndex).HasDefaultValue(0);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Options)
@@ -260,15 +260,15 @@ namespace LibraryManagementAPI.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.UserId).IsRequired();
-                entity.Property(e => e.StartedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.StartedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.Score).HasDefaultValue(0);
                 entity.Property(e => e.TotalScore).HasDefaultValue(0);
                 entity.Property(e => e.Percentage).HasDefaultValue(0);
                 entity.Property(e => e.IsPassed).HasDefaultValue(false);
                 entity.Property(e => e.TimeSpent).HasDefaultValue(0);
                 entity.Property(e => e.Status).HasDefaultValue(AttemptStatus.InProgress);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Quiz)
                     .WithMany(p => p.Attempts)
@@ -294,9 +294,9 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.QuestionId).IsRequired();
                 entity.Property(e => e.IsCorrect).HasDefaultValue(false);
                 entity.Property(e => e.PointsEarned).HasDefaultValue(0);
-                entity.Property(e => e.AnsweredAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.AnsweredAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.Attempt)
                     .WithMany(p => p.Answers)
@@ -638,8 +638,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.Price).HasColumnType("decimal(10,2)").HasDefaultValue(0.0m);
                 entity.Property(e => e.Downloads).HasDefaultValue(0);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Category);
                 entity.HasIndex(e => e.Subject);
@@ -657,8 +657,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.Subject).HasMaxLength(50);
                 entity.Property(e => e.OrderIndex).HasDefaultValue(0);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Category);
                 entity.HasIndex(e => e.Grade);
@@ -679,8 +679,8 @@ namespace LibraryManagementAPI.Data
                 entity.Property(e => e.FocusArabic).HasMaxLength(200);
                 entity.Property(e => e.OrderIndex).HasDefaultValue(0);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasIndex(e => e.Type);
                 entity.HasIndex(e => e.Grade);

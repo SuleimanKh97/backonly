@@ -3,75 +3,75 @@ using System;
 using LibraryManagementAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace LibraryManagementAPI.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20250807104318_AddQuizSystem")]
-    partial class AddQuizSystem
+    [Migration("20250825221743_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("LibraryManagementAPI.Models.AttemptAnswer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AnsweredAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("AttemptId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool?>("BooleanAnswer")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsCorrect")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<int>("PointsEarned")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("SelectedOptionId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TextAnswer")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -88,46 +88,46 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Biography")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("BiographyArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("NameArabic")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Nationality")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -141,60 +141,60 @@ namespace LibraryManagementAPI.Migrations
                             Id = 1,
                             Biography = "Egyptian poet and playwright",
                             BiographyArabic = "شاعر وكاتب مسرحي مصري",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4702),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8289),
                             IsActive = true,
                             Name = "Ahmed Shawqi",
                             NameArabic = "أحمد شوقي",
                             Nationality = "Egyptian",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4702)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8442)
                         },
                         new
                         {
                             Id = 2,
                             Biography = "Egyptian writer and intellectual",
                             BiographyArabic = "كاتب ومفكر مصري",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4705),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8556),
                             IsActive = true,
                             Name = "Taha Hussein",
                             NameArabic = "طه حسين",
                             Nationality = "Egyptian",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4706)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8556)
                         },
                         new
                         {
                             Id = 3,
                             Biography = "Egyptian philosopher and writer",
                             BiographyArabic = "فيلسوف وكاتب مصري",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4708),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8559),
                             IsActive = true,
                             Name = "Zaki Naguib Mahmoud",
                             NameArabic = "زكي نجيب محمود",
                             Nationality = "Egyptian",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4708)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8559)
                         },
                         new
                         {
                             Id = 4,
                             Biography = "Nobel Prize-winning Egyptian writer",
                             BiographyArabic = "كاتب مصري حائز على جائزة نوبل",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4710),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8561),
                             IsActive = true,
                             Name = "Naguib Mahfouz",
                             NameArabic = "نجيب محفوظ",
                             Nationality = "Egyptian",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4711)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8562)
                         },
                         new
                         {
                             Id = 5,
                             Biography = "Lebanese-American writer and poet",
                             BiographyArabic = "كاتب وشاعر لبناني أمريكي",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4712),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8564),
                             IsActive = true,
                             Name = "Khalil Gibran",
                             NameArabic = "جبران خليل جبران",
                             Nationality = "Lebanese",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4713)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 814, DateTimeKind.Utc).AddTicks(8564)
                         });
                 });
 
@@ -202,71 +202,71 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AuthorId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("CoverImageUrl")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("DescriptionArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ISBN")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<bool>("IsFeatured")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsNewRelease")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("Language")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("character varying(20)")
                         .HasDefaultValue("Arabic");
 
                     b.Property<decimal?>("OriginalPrice")
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<int?>("Pages")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime?>("PublicationDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("PublisherId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Rating")
                         .ValueGeneratedOnAdd()
@@ -275,31 +275,31 @@ namespace LibraryManagementAPI.Migrations
 
                     b.Property<int>("RatingCount")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("StockQuantity")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("TitleArabic")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("ViewCount")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
@@ -329,7 +329,7 @@ namespace LibraryManagementAPI.Migrations
                             Id = 1,
                             AuthorId = 5,
                             CategoryId = 6,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5046),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1681),
                             Description = "A book of 26 prose poetry essays written in English by the Lebanese-American poet and writer Kahlil Gibran",
                             DescriptionArabic = "كتاب يحتوي على 26 مقالة شعرية نثرية كتبها الشاعر والكاتب اللبناني الأمريكي جبران خليل جبران",
                             ISBN = "978-0-394-71585-9",
@@ -345,7 +345,7 @@ namespace LibraryManagementAPI.Migrations
                             StockQuantity = 25,
                             Title = "The Prophet",
                             TitleArabic = "النبي",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5047),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1761),
                             ViewCount = 500
                         },
                         new
@@ -353,7 +353,7 @@ namespace LibraryManagementAPI.Migrations
                             Id = 2,
                             AuthorId = 2,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5053),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1846),
                             Description = "An autobiographical novel by Taha Hussein",
                             DescriptionArabic = "رواية سيرة ذاتية لطه حسين",
                             ISBN = "978-977-02-1234-5",
@@ -369,7 +369,7 @@ namespace LibraryManagementAPI.Migrations
                             StockQuantity = 15,
                             Title = "The Days",
                             TitleArabic = "الأيام",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5053),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1847),
                             ViewCount = 320
                         },
                         new
@@ -377,7 +377,7 @@ namespace LibraryManagementAPI.Migrations
                             Id = 3,
                             AuthorId = 3,
                             CategoryId = 6,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5062),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1852),
                             Description = "An introduction to the philosophy of science",
                             DescriptionArabic = "مقدمة في فلسفة العلوم",
                             ISBN = "978-977-09-5678-9",
@@ -393,7 +393,7 @@ namespace LibraryManagementAPI.Migrations
                             StockQuantity = 8,
                             Title = "Philosophy of Science",
                             TitleArabic = "فلسفة العلوم",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5062),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1853),
                             ViewCount = 180
                         },
                         new
@@ -401,7 +401,7 @@ namespace LibraryManagementAPI.Migrations
                             Id = 4,
                             AuthorId = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5066),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1872),
                             Description = "A novel by Nobel Prize winner Naguib Mahfouz",
                             DescriptionArabic = "رواية للكاتب نجيب محفوظ الحائز على جائزة نوبل",
                             ISBN = "978-977-02-9012-3",
@@ -417,7 +417,7 @@ namespace LibraryManagementAPI.Migrations
                             StockQuantity = 12,
                             Title = "Children of Gebelawi",
                             TitleArabic = "أولاد حارتنا",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5067),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1873),
                             ViewCount = 450
                         },
                         new
@@ -425,7 +425,7 @@ namespace LibraryManagementAPI.Migrations
                             Id = 5,
                             AuthorId = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5071),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1878),
                             Description = "Collection of poems by Ahmed Shawqi",
                             DescriptionArabic = "مجموعة شعرية لأحمد شوقي",
                             ISBN = "978-963-12-3456-7",
@@ -441,7 +441,7 @@ namespace LibraryManagementAPI.Migrations
                             StockQuantity = 20,
                             Title = "Poetry Collection",
                             TitleArabic = "ديوان شعر",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5071),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(1878),
                             ViewCount = 250
                         });
                 });
@@ -450,36 +450,36 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BookId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("DisplayOrder")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("ImageType")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.HasKey("Id");
@@ -493,52 +493,52 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BookId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("CustomerEmail")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("CustomerName")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("CustomerPhone")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Message")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ResponseMessage")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("WhatsAppMessageSent")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.HasKey("Id");
@@ -558,44 +558,44 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("DescriptionArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("NameArabic")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -607,74 +607,74 @@ namespace LibraryManagementAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4996),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7651),
                             Description = "Fiction and literature books",
                             DescriptionArabic = "كتب الأدب والرواية",
                             Icon = "fas fa-feather-alt",
                             IsActive = true,
                             Name = "Literature",
                             NameArabic = "الأدب والرواية",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4996)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7651)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5000),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8151),
                             Description = "Science and research books",
                             DescriptionArabic = "كتب العلوم والبحث",
                             Icon = "fas fa-flask",
                             IsActive = true,
                             Name = "Science",
                             NameArabic = "العلوم",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5000)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8151)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5002),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8153),
                             Description = "History and civilization books",
                             DescriptionArabic = "كتب التاريخ والحضارة",
                             Icon = "fas fa-landmark",
                             IsActive = true,
                             Name = "History",
                             NameArabic = "التاريخ",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5002)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8153)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5003),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8155),
                             Description = "Religious and Islamic studies",
                             DescriptionArabic = "الكتب الدينية والدراسات الإسلامية",
                             Icon = "fas fa-mosque",
                             IsActive = true,
                             Name = "Religion",
                             NameArabic = "الدين",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5003)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8155)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5005),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8156),
                             Description = "Technology and programming books",
                             DescriptionArabic = "كتب التكنولوجيا والبرمجة",
                             Icon = "fas fa-laptop-code",
                             IsActive = true,
                             Name = "Technology",
                             NameArabic = "التكنولوجيا",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5005)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8157)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5006),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8168),
                             Description = "Philosophy and thought books",
                             DescriptionArabic = "كتب الفلسفة والفكر",
                             Icon = "fas fa-brain",
                             IsActive = true,
                             Name = "Philosophy",
                             NameArabic = "الفلسفة",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5006)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(8168)
                         });
                 });
 
@@ -682,48 +682,48 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("NameArabic")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Website")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
 
@@ -736,52 +736,52 @@ namespace LibraryManagementAPI.Migrations
                         {
                             Id = 1,
                             Address = "Cairo, Egypt",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4963),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(6825),
                             Email = "info@daralmaarif.com",
                             IsActive = true,
                             Name = "Dar Al-Ma'arif",
                             NameArabic = "دار المعارف",
                             Phone = "+20123456789",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4963),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(6920),
                             Website = "www.daralmaarif.com"
                         },
                         new
                         {
                             Id = 2,
                             Address = "Cairo, Egypt",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4967),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7008),
                             Email = "info@shorouk.com",
                             IsActive = true,
                             Name = "Dar Al-Shorouk",
                             NameArabic = "دار الشروق",
                             Phone = "+20123456790",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4967),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7009),
                             Website = "www.shorouk.com"
                         },
                         new
                         {
                             Id = 3,
                             Address = "Beirut, Lebanon",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4969),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7012),
                             Email = "info@arabicbook.com",
                             IsActive = true,
                             Name = "Dar Al-Kitab Al-Arabi",
                             NameArabic = "دار الكتاب العربي",
                             Phone = "+96112345678",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4970),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7012),
                             Website = "www.arabicbook.com"
                         },
                         new
                         {
                             Id = 4,
                             Address = "Damascus, Syria",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4972),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7014),
                             Email = "info@alfikr.com",
                             IsActive = true,
                             Name = "Dar Al-Fikr",
                             NameArabic = "دار الفكر",
                             Phone = "+96312345678",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(4972),
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 815, DateTimeKind.Utc).AddTicks(7014),
                             Website = "www.alfikr.com"
                         });
                 });
@@ -790,39 +790,39 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsCorrect")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("OptionText")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("OptionTextArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("OrderIndex")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -836,354 +836,354 @@ namespace LibraryManagementAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5302),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(8835),
                             IsCorrect = true,
                             OptionText = "4",
                             OptionTextArabic = "4",
                             OrderIndex = 1,
                             QuestionId = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5303)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(8926)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5305),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9004),
                             IsCorrect = false,
                             OptionText = "6",
                             OptionTextArabic = "6",
                             OrderIndex = 2,
                             QuestionId = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5306)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9004)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5307),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9006),
                             IsCorrect = false,
                             OptionText = "8",
                             OptionTextArabic = "8",
                             OrderIndex = 3,
                             QuestionId = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5308)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9007)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5310),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9008),
                             IsCorrect = false,
                             OptionText = "10",
                             OptionTextArabic = "10",
                             OrderIndex = 4,
                             QuestionId = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5310)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9009)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5312),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9011),
                             IsCorrect = true,
                             OptionText = "5",
                             OptionTextArabic = "5",
                             OrderIndex = 1,
                             QuestionId = 2,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5312)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9011)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5314),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9013),
                             IsCorrect = false,
                             OptionText = "3",
                             OptionTextArabic = "3",
                             OrderIndex = 2,
                             QuestionId = 2,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5314)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9013)
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5316),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9015),
                             IsCorrect = false,
                             OptionText = "7",
                             OptionTextArabic = "7",
                             OrderIndex = 3,
                             QuestionId = 2,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5316)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9015)
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5318),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9017),
                             IsCorrect = false,
                             OptionText = "9",
                             OptionTextArabic = "9",
                             OrderIndex = 4,
                             QuestionId = 2,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5318)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9017)
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5320),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9052),
                             IsCorrect = true,
                             OptionText = "30",
                             OptionTextArabic = "30",
                             OrderIndex = 1,
                             QuestionId = 4,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5320)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9052)
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5322),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9054),
                             IsCorrect = false,
                             OptionText = "25",
                             OptionTextArabic = "25",
                             OrderIndex = 2,
                             QuestionId = 4,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5322)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9054)
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5324),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9056),
                             IsCorrect = false,
                             OptionText = "35",
                             OptionTextArabic = "35",
                             OrderIndex = 3,
                             QuestionId = 4,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5324)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9056)
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5326),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9058),
                             IsCorrect = false,
                             OptionText = "40",
                             OptionTextArabic = "40",
                             OrderIndex = 4,
                             QuestionId = 4,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9059)
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5345),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9264),
                             IsCorrect = true,
                             OptionText = "Newton",
                             OptionTextArabic = "نيوتن",
                             OrderIndex = 1,
                             QuestionId = 6,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5346)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9265)
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5347),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9267),
                             IsCorrect = false,
                             OptionText = "Joule",
                             OptionTextArabic = "جول",
                             OrderIndex = 2,
                             QuestionId = 6,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5348)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9267)
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5349),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9269),
                             IsCorrect = false,
                             OptionText = "Watt",
                             OptionTextArabic = "واط",
                             OrderIndex = 3,
                             QuestionId = 6,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5350)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9269)
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5352),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9271),
                             IsCorrect = false,
                             OptionText = "Pascal",
                             OptionTextArabic = "باسكال",
                             OrderIndex = 4,
                             QuestionId = 6,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5352)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9271)
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5354),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9273),
                             IsCorrect = true,
                             OptionText = "KE = 1/2 mv²",
                             OptionTextArabic = "ط ح = 1/2 ك ع²",
                             OrderIndex = 1,
                             QuestionId = 8,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5354)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9274)
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5356),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9275),
                             IsCorrect = false,
                             OptionText = "KE = mv",
                             OptionTextArabic = "ط ح = ك ع",
                             OrderIndex = 2,
                             QuestionId = 8,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5356)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9276)
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5358),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9278),
                             IsCorrect = false,
                             OptionText = "KE = mgh",
                             OptionTextArabic = "ط ح = ك ج ع",
                             OrderIndex = 3,
                             QuestionId = 8,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5358)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9278)
                         },
                         new
                         {
                             Id = 20,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5359),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9280),
                             IsCorrect = false,
                             OptionText = "KE = Fd",
                             OptionTextArabic = "ط ح = ق ف",
                             OrderIndex = 4,
                             QuestionId = 8,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5360)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9280)
                         },
                         new
                         {
                             Id = 21,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5361),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9282),
                             IsCorrect = true,
                             OptionText = "Watt",
                             OptionTextArabic = "واط",
                             OrderIndex = 1,
                             QuestionId = 10,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5362)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9282)
                         },
                         new
                         {
                             Id = 22,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5363),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9284),
                             IsCorrect = false,
                             OptionText = "Joule",
                             OptionTextArabic = "جول",
                             OrderIndex = 2,
                             QuestionId = 10,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5364)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9284)
                         },
                         new
                         {
                             Id = 23,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5365),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9288),
                             IsCorrect = false,
                             OptionText = "Newton",
                             OptionTextArabic = "نيوتن",
                             OrderIndex = 3,
                             QuestionId = 10,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5366)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9288)
                         },
                         new
                         {
                             Id = 24,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5367),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9290),
                             IsCorrect = false,
                             OptionText = "Meter",
                             OptionTextArabic = "متر",
                             OrderIndex = 4,
                             QuestionId = 10,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5368)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9290)
                         },
                         new
                         {
                             Id = 25,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5384),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9310),
                             IsCorrect = true,
                             OptionText = "1",
                             OptionTextArabic = "1",
                             OrderIndex = 1,
                             QuestionId = 12,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5385)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9310)
                         },
                         new
                         {
                             Id = 26,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5386),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9312),
                             IsCorrect = false,
                             OptionText = "2",
                             OptionTextArabic = "2",
                             OrderIndex = 2,
                             QuestionId = 12,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5387)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9313)
                         },
                         new
                         {
                             Id = 27,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5388),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9314),
                             IsCorrect = false,
                             OptionText = "3",
                             OptionTextArabic = "3",
                             OrderIndex = 3,
                             QuestionId = 12,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5389)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9315)
                         },
                         new
                         {
                             Id = 28,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5390),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9316),
                             IsCorrect = false,
                             OptionText = "4",
                             OptionTextArabic = "4",
                             OrderIndex = 4,
                             QuestionId = 12,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5391)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9317)
                         },
                         new
                         {
                             Id = 29,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5392),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9319),
                             IsCorrect = true,
                             OptionText = "Au",
                             OptionTextArabic = "Au",
                             OrderIndex = 1,
                             QuestionId = 14,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5393)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9319)
                         },
                         new
                         {
                             Id = 30,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5394),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9320),
                             IsCorrect = false,
                             OptionText = "Ag",
                             OptionTextArabic = "Ag",
                             OrderIndex = 2,
                             QuestionId = 14,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5395)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9321)
                         },
                         new
                         {
                             Id = 31,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5396),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9323),
                             IsCorrect = false,
                             OptionText = "Cu",
                             OptionTextArabic = "Cu",
                             OrderIndex = 3,
                             QuestionId = 14,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5397)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9323)
                         },
                         new
                         {
                             Id = 32,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5398),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9325),
                             IsCorrect = false,
                             OptionText = "Fe",
                             OptionTextArabic = "Fe",
                             OrderIndex = 4,
                             QuestionId = 14,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5399)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(9325)
                         });
                 });
 
@@ -1191,74 +1191,74 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Chapter")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("DescriptionArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Grade")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<bool>("IsPublic")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<int>("PassingScore")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(60);
 
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("TimeLimit")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(30);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("TitleArabic")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("TotalQuestions")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -1277,7 +1277,7 @@ namespace LibraryManagementAPI.Migrations
                         {
                             Id = 1,
                             Chapter = "Algebra",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5143),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5222),
                             Description = "Basic mathematics quiz for 10th grade students",
                             DescriptionArabic = "كويز أساسيات الرياضيات لطلاب الصف العاشر",
                             Grade = "Grade 10",
@@ -1289,13 +1289,13 @@ namespace LibraryManagementAPI.Migrations
                             Title = "Mathematics Quiz - Grade 10",
                             TitleArabic = "كويز الرياضيات - الصف العاشر",
                             TotalQuestions = 5,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5143)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5325)
                         },
                         new
                         {
                             Id = 2,
                             Chapter = "Mechanics",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5147),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5424),
                             Description = "Physics fundamentals for Tawjihi students",
                             DescriptionArabic = "أساسيات الفيزياء لطلاب التوجيهي",
                             Grade = "Tawjihi",
@@ -1307,13 +1307,13 @@ namespace LibraryManagementAPI.Migrations
                             Title = "Physics Quiz - Tawjihi",
                             TitleArabic = "كويز الفيزياء - التوجيهي",
                             TotalQuestions = 6,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5147)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5425)
                         },
                         new
                         {
                             Id = 3,
                             Chapter = "Atomic Structure",
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5150),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5429),
                             Description = "Chemistry basics for 11th grade students",
                             DescriptionArabic = "أساسيات الكيمياء لطلاب الصف الحادي عشر",
                             Grade = "Grade 11",
@@ -1325,7 +1325,7 @@ namespace LibraryManagementAPI.Migrations
                             Title = "Chemistry Quiz - Grade 11",
                             TitleArabic = "كويز الكيمياء - الصف الحادي عشر",
                             TotalQuestions = 4,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5151)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(5429)
                         });
                 });
 
@@ -1333,64 +1333,64 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsPassed")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<double>("Percentage")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("double")
+                        .HasColumnType("double precision")
                         .HasDefaultValue(0.0);
 
                     b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Score")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("StartedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("TimeSpent")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("TotalScore")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1409,50 +1409,50 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Explanation")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ExplanationArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("OrderIndex")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("Points")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("QuestionTextArabic")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Type")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -1466,209 +1466,459 @@ namespace LibraryManagementAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5171),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7088),
                             OrderIndex = 1,
                             Points = 1,
                             QuestionText = "What is the value of x in the equation 2x + 5 = 13?",
                             QuestionTextArabic = "ما قيمة س في المعادلة 2س + 5 = 13؟",
                             QuizId = 1,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5172)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7173)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5175),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7262),
                             OrderIndex = 2,
                             Points = 1,
                             QuestionText = "Solve: 3x - 7 = 8",
                             QuestionTextArabic = "حل المعادلة: 3س - 7 = 8",
                             QuizId = 1,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5175)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7263)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5177),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7265),
                             OrderIndex = 3,
                             Points = 1,
                             QuestionText = "The square root of 16 is 4",
                             QuestionTextArabic = "الجذر التربيعي لـ 16 هو 4",
                             QuizId = 1,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5177)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7266)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5179),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7268),
                             OrderIndex = 4,
                             Points = 1,
                             QuestionText = "What is 15% of 200?",
                             QuestionTextArabic = "ما هو 15% من 200؟",
                             QuizId = 1,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5180)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7269)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5182),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7271),
                             OrderIndex = 5,
                             Points = 1,
                             QuestionText = "The sum of angles in a triangle is 180 degrees",
                             QuestionTextArabic = "مجموع زوايا المثلث 180 درجة",
                             QuizId = 1,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5182)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7271)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5201),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7599),
                             OrderIndex = 1,
                             Points = 1,
                             QuestionText = "What is the SI unit of force?",
                             QuestionTextArabic = "ما هي وحدة القوة في النظام الدولي؟",
                             QuizId = 2,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5201)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7600)
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5203),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7602),
                             OrderIndex = 2,
                             Points = 1,
                             QuestionText = "Newton's first law is also known as the law of inertia",
                             QuestionTextArabic = "قانون نيوتن الأول يعرف أيضاً بقانون القصور الذاتي",
                             QuizId = 2,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5204)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7603)
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5205),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7605),
                             OrderIndex = 3,
                             Points = 1,
                             QuestionText = "What is the formula for kinetic energy?",
                             QuestionTextArabic = "ما هي معادلة الطاقة الحركية؟",
                             QuizId = 2,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5206)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7605)
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5208),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7608),
                             OrderIndex = 4,
                             Points = 1,
                             QuestionText = "Gravity is a force that pulls objects toward the center of the Earth",
                             QuestionTextArabic = "الجاذبية قوة تجذب الأجسام نحو مركز الأرض",
                             QuizId = 2,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5208)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7608)
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5253),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7610),
                             OrderIndex = 5,
                             Points = 1,
                             QuestionText = "What is the unit of power?",
                             QuestionTextArabic = "ما هي وحدة القدرة؟",
                             QuizId = 2,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5253)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7611)
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5255),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7718),
                             OrderIndex = 6,
                             Points = 1,
                             QuestionText = "Velocity is a scalar quantity",
                             QuestionTextArabic = "السرعة كمية قياسية",
                             QuizId = 2,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5256)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7719)
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5275),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7751),
                             OrderIndex = 1,
                             Points = 1,
                             QuestionText = "What is the atomic number of hydrogen?",
                             QuestionTextArabic = "ما هو العدد الذري للهيدروجين؟",
                             QuizId = 3,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5275)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7752)
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5277),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7754),
                             OrderIndex = 2,
                             Points = 1,
                             QuestionText = "The nucleus contains protons and neutrons",
                             QuestionTextArabic = "النواة تحتوي على البروتونات والنيوترونات",
                             QuizId = 3,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5277)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7755)
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5279),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7760),
                             OrderIndex = 3,
                             Points = 1,
                             QuestionText = "What is the chemical symbol for gold?",
                             QuestionTextArabic = "ما هو الرمز الكيميائي للذهب؟",
                             QuizId = 3,
                             Type = 0,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5279)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7760)
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5281),
+                            CreatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7762),
                             OrderIndex = 4,
                             Points = 1,
                             QuestionText = "Electrons have a positive charge",
                             QuestionTextArabic = "الإلكترونات لها شحنة موجبة",
                             QuizId = 3,
                             Type = 1,
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5282)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(7762)
                         });
+                });
+
+            modelBuilder.Entity("LibraryManagementAPI.Models.StudyMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Delivery")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("PDF / طباعة");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DescriptionArabic")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Downloads")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Features")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<decimal>("Price")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10,2)")
+                        .HasDefaultValue(0.0m);
+
+                    b.Property<decimal>("Rating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(3,2)")
+                        .HasDefaultValue(0.0m);
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasDefaultValue("متوفر");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Teacher")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("TitleArabic")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Subject");
+
+                    b.ToTable("StudyMaterials");
+                });
+
+            modelBuilder.Entity("LibraryManagementAPI.Models.StudySchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Day")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DescriptionArabic")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Focus")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("FocusArabic")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("OrderIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Subjects")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("TitleArabic")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Grade");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Type");
+
+                    b.ToTable("StudySchedules");
+                });
+
+            modelBuilder.Entity("LibraryManagementAPI.Models.StudyTip", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DescriptionArabic")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("OrderIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Tips")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("TitleArabic")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("Grade");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Subject");
+
+                    b.ToTable("StudyTips");
                 });
 
             modelBuilder.Entity("LibraryManagementAPI.Models.SystemSetting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("SettingKey")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("SettingValue")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -1684,7 +1934,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library WhatsApp contact number",
                             SettingKey = "WhatsAppPhoneNumber",
                             SettingValue = "+962785462983",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5098)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2555)
                         },
                         new
                         {
@@ -1692,7 +1942,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "WhatsApp message template for book inquiries",
                             SettingKey = "WhatsAppMessageTemplate",
                             SettingValue = "مرحباً، أود الاستفسار عن توفر كتاب: {BookTitle} - {BookAuthor}",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5100)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2896)
                         },
                         new
                         {
@@ -1700,7 +1950,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library name",
                             SettingKey = "LibraryName",
                             SettingValue = "ROYAL STUDY",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5102)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2898)
                         },
                         new
                         {
@@ -1708,7 +1958,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library name in English",
                             SettingKey = "LibraryNameEnglish",
                             SettingValue = "ROYAL STUDY",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5103)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2899)
                         },
                         new
                         {
@@ -1716,7 +1966,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library contact email",
                             SettingKey = "ContactEmail",
                             SettingValue = "info@royalstudy.com",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5104)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2900)
                         },
                         new
                         {
@@ -1724,7 +1974,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library contact phone",
                             SettingKey = "ContactPhone",
                             SettingValue = "+962785462983",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5105)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2901)
                         },
                         new
                         {
@@ -1732,7 +1982,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library address",
                             SettingKey = "LibraryAddress",
                             SettingValue = "إربد، الأردن",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5105)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2902)
                         },
                         new
                         {
@@ -1740,7 +1990,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library address in English",
                             SettingKey = "LibraryAddressEnglish",
                             SettingValue = "Irbid, Jordan",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5106)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2903)
                         },
                         new
                         {
@@ -1748,7 +1998,7 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library currency",
                             SettingKey = "Currency",
                             SettingValue = "د.أ",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5107)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2903)
                         },
                         new
                         {
@@ -1756,86 +2006,86 @@ namespace LibraryManagementAPI.Migrations
                             Description = "Library currency in English",
                             SettingKey = "CurrencyEnglish",
                             SettingValue = "JOD",
-                            UpdatedAt = new DateTime(2025, 8, 7, 10, 43, 17, 764, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2025, 8, 25, 22, 17, 40, 816, DateTimeKind.Utc).AddTicks(2904)
                         });
                 });
 
             modelBuilder.Entity("LibraryManagementAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -1852,19 +2102,19 @@ namespace LibraryManagementAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -1879,19 +2129,19 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1904,19 +2154,19 @@ namespace LibraryManagementAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1928,17 +2178,17 @@ namespace LibraryManagementAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -1950,10 +2200,10 @@ namespace LibraryManagementAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -1965,16 +2215,16 @@ namespace LibraryManagementAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

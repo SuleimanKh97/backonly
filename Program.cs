@@ -20,9 +20,8 @@ builder.Services.AddControllers()
 
 // Configure Entity Framework
 builder.Services.AddDbContext<LibraryDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 21))
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
 // Configure Identity
@@ -186,14 +185,22 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        // Ensure database is created
-        await context.Database.EnsureCreatedAsync();
+        try
+        {
+            // Ensure database is created
+            await context.Database.EnsureCreatedAsync();
 
-        // Seed roles
-        await SeedRolesAsync(roleManager);
+            // Seed roles
+            await SeedRolesAsync(roleManager);
 
-        // Seed admin user
-        await SeedAdminUserAsync(userManager);
+            // Seed admin user
+            await SeedAdminUserAsync(userManager);
+        }
+        catch (Exception dbEx)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning(dbEx, "Database connection failed. Application will start without database initialization. Error: {Message}", dbEx.Message);
+        }
     }
     catch (Exception ex)
     {
