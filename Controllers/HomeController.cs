@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using LibraryManagementAPI.Data;
 
 namespace LibraryManagementAPI.Controllers
 {
@@ -41,6 +43,43 @@ namespace LibraryManagementAPI.Controllers
                 timestamp = DateTime.UtcNow,
                 environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"
             });
+        }
+
+        [HttpGet("test-db")]
+        public async Task<IActionResult> TestDatabase()
+        {
+            try
+            {
+                var context = HttpContext.RequestServices.GetRequiredService<LibraryDbContext>();
+                
+                // Test basic connection
+                var bookCount = await context.Books.CountAsync();
+                var authorCount = await context.Authors.CountAsync();
+                var publisherCount = await context.Publishers.CountAsync();
+                var categoryCount = await context.Categories.CountAsync();
+
+                return Ok(new
+                {
+                    message = "Database connection successful",
+                    counts = new
+                    {
+                        books = bookCount,
+                        authors = authorCount,
+                        publishers = publisherCount,
+                        categories = categoryCount
+                    },
+                    timestamp = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Database connection failed",
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
         }
     }
 }

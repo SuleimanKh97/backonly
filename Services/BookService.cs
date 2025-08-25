@@ -122,6 +122,8 @@ namespace LibraryManagementAPI.Services
         {
             try
             {
+                Console.WriteLine($"Starting book creation with data: {System.Text.Json.JsonSerializer.Serialize(createBookDto)}");
+
                 // Check if ISBN already exists
                 if (!string.IsNullOrEmpty(createBookDto.ISBN))
                 {
@@ -140,6 +142,7 @@ namespace LibraryManagementAPI.Services
                     {
                         throw new Exception($"Author with ID {createBookDto.AuthorId.Value} not found.");
                     }
+                    Console.WriteLine($"Author found: {author.Name}");
                 }
 
                 if (createBookDto.PublisherId.HasValue)
@@ -149,6 +152,7 @@ namespace LibraryManagementAPI.Services
                     {
                         throw new Exception($"Publisher with ID {createBookDto.PublisherId.Value} not found.");
                     }
+                    Console.WriteLine($"Publisher found: {publisher.Name}");
                 }
 
                 if (createBookDto.CategoryId.HasValue)
@@ -158,6 +162,7 @@ namespace LibraryManagementAPI.Services
                     {
                         throw new Exception($"Category with ID {createBookDto.CategoryId.Value} not found.");
                     }
+                    Console.WriteLine($"Category found: {category.Name}");
                 }
 
                 var book = new Book
@@ -184,8 +189,23 @@ namespace LibraryManagementAPI.Services
                     UpdatedAt = DateTime.UtcNow
                 };
 
+                Console.WriteLine($"Book object created: {System.Text.Json.JsonSerializer.Serialize(book)}");
+
                 _context.Books.Add(book);
-                await _context.SaveChangesAsync();
+                Console.WriteLine("Book added to context");
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine($"Book saved successfully with ID: {book.Id}");
+                }
+                catch (Exception saveEx)
+                {
+                    Console.WriteLine($"SaveChanges failed: {saveEx.Message}");
+                    Console.WriteLine($"Inner exception: {saveEx.InnerException?.Message}");
+                    Console.WriteLine($"Stack trace: {saveEx.StackTrace}");
+                    throw new Exception($"Database save failed: {saveEx.Message}", saveEx);
+                }
 
                 return await GetBookByIdAsync(book.Id);
             }
@@ -194,6 +214,11 @@ namespace LibraryManagementAPI.Services
                 // Log the exception details
                 Console.WriteLine($"Error creating book: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner stack trace: {ex.InnerException.StackTrace}");
+                }
                 throw new Exception($"Failed to create book: {ex.Message}", ex);
             }
         }
