@@ -89,7 +89,23 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .WithExposedHeaders("Content-Disposition");
+    });
+    
+    // Specific policy for production
+    options.AddPolicy("Production", policy =>
+    {
+        policy.WithOrigins(
+                "https://frontendonly.vercel.app",
+                "https://royal-library.vercel.app",
+                "http://localhost:5173",
+                "http://localhost:3000"
+              )
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .WithExposedHeaders("Content-Disposition");
     });
 });
 
@@ -160,7 +176,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 // Use CORS
-app.UseCors("AllowAll");
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowAll");
+}
+else
+{
+    app.UseCors("Production");
+}
 
 // Use Authentication & Authorization
 app.UseAuthentication();
