@@ -3905,11 +3905,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ENG.K\\Documents\\LibraryManagementAPI\\backonly\\LibraryManagementAPI.csproj",
+      "projectUniqueName": "C:\\Users\\ENG.K\\Desktop\\Work\\royalfront and back\\backonly\\LibraryManagementAPI.csproj",
       "projectName": "LibraryManagementAPI",
-      "projectPath": "C:\\Users\\ENG.K\\Documents\\LibraryManagementAPI\\backonly\\LibraryManagementAPI.csproj",
+      "projectPath": "C:\\Users\\ENG.K\\Desktop\\Work\\royalfront and back\\backonly\\LibraryManagementAPI.csproj",
       "packagesPath": "C:\\Users\\ENG.K\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ENG.K\\Documents\\LibraryManagementAPI\\backonly\\obj\\",
+      "outputPath": "C:\\Users\\ENG.K\\Desktop\\Work\\royalfront and back\\backonly\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ENG.K\\AppData\\Roaming\\NuGet\\NuGet.Config"

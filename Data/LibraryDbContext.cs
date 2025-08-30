@@ -13,10 +13,12 @@ namespace LibraryManagementAPI.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<BookInquiry> BookInquiries { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
@@ -69,6 +71,52 @@ namespace LibraryManagementAPI.Data
 
                 entity.HasIndex(e => e.ISBN).IsUnique();
                 entity.HasIndex(e => e.Title);
+                entity.HasIndex(e => e.IsAvailable);
+                entity.HasIndex(e => e.IsFeatured);
+                entity.HasIndex(e => e.IsNewRelease);
+            });
+
+            // Configure Product entity
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.TitleArabic).HasMaxLength(200);
+                entity.Property(e => e.SKU).HasMaxLength(20);
+                entity.Property(e => e.ProductType).IsRequired().HasMaxLength(50).HasDefaultValue("Book");
+                entity.Property(e => e.Grade).HasMaxLength(50);
+                entity.Property(e => e.Subject).HasMaxLength(50);
+                entity.Property(e => e.Language).HasMaxLength(20).HasDefaultValue("Arabic");
+                entity.Property(e => e.Price).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.OriginalPrice).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.Rating).HasColumnType("decimal(3,2)").HasDefaultValue(0.0m);
+                entity.Property(e => e.StockQuantity).HasDefaultValue(0);
+                entity.Property(e => e.IsAvailable).HasDefaultValue(true);
+                entity.Property(e => e.IsFeatured).HasDefaultValue(false);
+                entity.Property(e => e.IsNewRelease).HasDefaultValue(false);
+                entity.Property(e => e.RatingCount).HasDefaultValue(0);
+                entity.Property(e => e.ViewCount).HasDefaultValue(0);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.Author)
+                    .WithMany()
+                    .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(d => d.Publisher)
+                    .WithMany()
+                    .HasForeignKey(d => d.PublisherId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(d => d.Category)
+                    .WithMany()
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasIndex(e => e.SKU).IsUnique();
+                entity.HasIndex(e => e.Title);
+                entity.HasIndex(e => e.ProductType);
                 entity.HasIndex(e => e.IsAvailable);
                 entity.HasIndex(e => e.IsFeatured);
                 entity.HasIndex(e => e.IsNewRelease);
@@ -138,6 +186,24 @@ namespace LibraryManagementAPI.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasIndex(e => e.BookId);
+            });
+
+            // Configure ProductImage entity
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ImageUrl).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.ImageType).HasMaxLength(50).HasDefaultValue("Gallery");
+                entity.Property(e => e.DisplayOrder).HasDefaultValue(0);
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductImages)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => e.ProductId);
             });
 
             // Configure BookInquiry entity
