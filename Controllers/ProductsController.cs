@@ -260,6 +260,33 @@ namespace LibraryManagementAPI.Controllers
             }
         }
 
+        [HttpGet("test-static-files")]
+        public IActionResult TestStaticFiles()
+        {
+            try
+            {
+                var webRootPath = _environment.WebRootPath;
+                var uploadsPath = Path.Combine(webRootPath, "uploads", "products");
+
+                var exists = Directory.Exists(uploadsPath);
+                var files = exists ? Directory.GetFiles(uploadsPath) : new string[0];
+
+                return Ok(new
+                {
+                    webRootPath = webRootPath,
+                    uploadsPath = uploadsPath,
+                    uploadsDirectoryExists = exists,
+                    fileCount = files.Length,
+                    files = files.Take(5).Select(Path.GetFileName).ToArray(),
+                    currentDirectory = Directory.GetCurrentDirectory()
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Test failed", error = ex.Message });
+            }
+        }
+
         [HttpPost("validate")]
         [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> ValidateProductData([FromBody] CreateProductDto createProductDto)

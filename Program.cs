@@ -13,6 +13,19 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure web root path for static files
+if (string.IsNullOrEmpty(builder.Environment.WebRootPath))
+{
+    builder.Environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+}
+
+// Ensure uploads directory exists
+var uploadsPath = Path.Combine(builder.Environment.WebRootPath, "uploads", "products");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -222,16 +235,23 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 
-// Use Static Files for serving uploaded images
-app.UseStaticFiles();
-
 // Configure static files for uploads directory specifically
+// This must come BEFORE app.UseStaticFiles() to take precedence
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.WebRootPath, "uploads")),
     RequestPath = "/uploads"
 });
+
+// Use Static Files for serving other static files
+app.UseStaticFiles();
+
+// Log the web root path for debugging
+var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();
+startupLogger.LogInformation("WebRootPath: {WebRootPath}", builder.Environment.WebRootPath);
+startupLogger.LogInformation("Uploads path: {UploadsPath}", Path.Combine(builder.Environment.WebRootPath, "uploads"));
+startupLogger.LogInformation("Products path: {ProductsPath}", Path.Combine(builder.Environment.WebRootPath, "uploads", "products"));
 
 // Use CORS - Must be before UseAuthentication and UseAuthorization
 // Temporarily use AllowAll for production to fix CORS issues
