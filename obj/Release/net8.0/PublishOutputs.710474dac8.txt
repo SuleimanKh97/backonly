@@ -1,4 +1,6 @@
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\LibraryManagementAPI.exe
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\wwwroot\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\wwwroot\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\web.config
@@ -73,6 +75,11 @@ C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.deps.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.deps.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\railway.json
