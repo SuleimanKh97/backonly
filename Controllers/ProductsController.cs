@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagementAPI.DTOs;
 using LibraryManagementAPI.Services;
+using System.Security.Claims;
 
 namespace LibraryManagementAPI.Controllers
 {
