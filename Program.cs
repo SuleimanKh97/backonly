@@ -100,11 +100,22 @@ builder.Services.AddCors(options =>
                 "https://frontendonly.vercel.app",
                 "https://royal-library.vercel.app",
                 "http://localhost:5173",
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "http://localhost:4200",
+                "https://localhost:4200"
               )
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials()
+              .WithExposedHeaders("Content-Disposition");
+    });
+    
+    // Fallback policy that allows all origins for debugging
+    options.AddPolicy("Debug", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader()
               .WithExposedHeaders("Content-Disposition");
     });
 });
@@ -175,15 +186,14 @@ app.UseHttpsRedirection();
 // Use Static Files for serving uploaded images
 app.UseStaticFiles();
 
-// Use CORS
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors("AllowAll");
-}
-else
-{
-    app.UseCors("Production");
-}
+// Use CORS - Must be before UseAuthentication and UseAuthorization
+// Temporarily use AllowAll for production to fix CORS issues
+var corsPolicy = "AllowAll"; // app.Environment.IsDevelopment() ? "AllowAll" : "Production";
+app.UseCors(corsPolicy);
+
+// Log CORS policy being used
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("Using CORS policy: {CorsPolicy} for environment: {Environment}", corsPolicy, app.Environment.EnvironmentName);
 
 // Use Authentication & Authorization
 app.UseAuthentication();
