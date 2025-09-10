@@ -237,6 +237,34 @@ namespace LibraryManagementAPI.Services
                     await _context.SaveChangesAsync();
                     Console.WriteLine($"Product saved successfully with ID: {product.Id}");
 
+                    // Handle product images if provided
+                    if (createProductDto.Images != null && createProductDto.Images.Any())
+                    {
+                        Console.WriteLine($"Processing {createProductDto.Images.Count} product images...");
+                        foreach (var imageDto in createProductDto.Images)
+                        {
+                            var productImage = new ProductImage
+                            {
+                                ProductId = product.Id,
+                                ImageUrl = imageDto.ImageUrl,
+                                ImageType = imageDto.ImageType,
+                                DisplayOrder = imageDto.DisplayOrder,
+                                IsActive = imageDto.IsActive,
+                                CreatedAt = DateTime.UtcNow
+                            };
+
+                            _context.ProductImages.Add(productImage);
+                            Console.WriteLine($"Added product image: {imageDto.ImageUrl}");
+                        }
+
+                        await _context.SaveChangesAsync();
+                        Console.WriteLine("All product images saved successfully");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No product images provided");
+                    }
+
                     // Reload the product with navigation properties
                     var savedProduct = await _context.Products
                         .Include(p => p.Author)
