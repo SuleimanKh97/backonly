@@ -308,6 +308,13 @@ namespace LibraryManagementAPI.Services
             if (product == null)
                 return null;
 
+            // Debug logging
+            Console.WriteLine($"Updating product {id}:");
+            Console.WriteLine($"  Old Title: {product.Title}");
+            Console.WriteLine($"  Old TitleArabic: {product.TitleArabic}");
+            Console.WriteLine($"  New Title: {updateProductDto.Title}");
+            Console.WriteLine($"  New TitleArabic: {updateProductDto.TitleArabic}");
+
             // Update properties
             product.Title = updateProductDto.Title;
             product.TitleArabic = updateProductDto.TitleArabic;
@@ -384,9 +391,15 @@ namespace LibraryManagementAPI.Services
                 }
             }
 
-            await _context.SaveChangesAsync();
+            var saveResult = await _context.SaveChangesAsync();
+            Console.WriteLine($"SaveChanges result: {saveResult} changes saved");
 
-            return await GetProductByIdAsync(id);
+            var updatedProduct = await GetProductByIdAsync(id);
+            Console.WriteLine($"Updated product from DB:");
+            Console.WriteLine($"  Title: {updatedProduct?.Title}");
+            Console.WriteLine($"  TitleArabic: {updatedProduct?.TitleArabic}");
+
+            return updatedProduct;
         }
 
         public async Task<bool> DeleteProductAsync(int id)

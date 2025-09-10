@@ -194,3 +194,17 @@ C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publ
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.deps.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\railway.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\wwwroot\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\appsettings.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.deps.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\railway.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\wwwroot\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.Development.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\appsettings.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.deps.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Release\net8.0\publish\publish\publish\publish\publish\publish\publish\publish\railway.json
