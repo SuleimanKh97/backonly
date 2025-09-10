@@ -139,6 +139,15 @@ namespace LibraryManagementAPI.Services
             try
             {
                 Console.WriteLine($"Starting product creation with data: {System.Text.Json.JsonSerializer.Serialize(createProductDto)}");
+                Console.WriteLine($"Product data details:");
+                Console.WriteLine($"  Title: '{createProductDto.Title}'");
+                Console.WriteLine($"  TitleArabic: '{createProductDto.TitleArabic}'");
+                Console.WriteLine($"  SKU: '{createProductDto.SKU}'");
+                Console.WriteLine($"  ProductType: '{createProductDto.ProductType}'");
+                Console.WriteLine($"  AuthorId: {createProductDto.AuthorId}");
+                Console.WriteLine($"  PublisherId: {createProductDto.PublisherId}");
+                Console.WriteLine($"  CategoryId: {createProductDto.CategoryId}");
+                Console.WriteLine($"  Price: {createProductDto.Price}");
 
                 // Check if SKU already exists (if provided)
                 if (!string.IsNullOrEmpty(createProductDto.SKU))
@@ -148,6 +157,11 @@ namespace LibraryManagementAPI.Services
                     {
                         throw new Exception($"A product with SKU '{createProductDto.SKU}' already exists.");
                     }
+                    Console.WriteLine($"SKU '{createProductDto.SKU}' is unique");
+                }
+                else
+                {
+                    Console.WriteLine("SKU is empty or null - proceeding without SKU uniqueness check");
                 }
 
                 // Check if foreign key references exist (only for books)
@@ -218,8 +232,9 @@ namespace LibraryManagementAPI.Services
 
                 try
                 {
+                    Console.WriteLine("Attempting to save product to database...");
                     await _context.SaveChangesAsync();
-                    Console.WriteLine("Product saved successfully");
+                    Console.WriteLine($"Product saved successfully with ID: {product.Id}");
 
                     // Reload the product with navigation properties
                     var savedProduct = await _context.Products
@@ -229,12 +244,23 @@ namespace LibraryManagementAPI.Services
                         .Include(p => p.ProductImages)
                         .FirstOrDefaultAsync(p => p.Id == product.Id);
 
+                    Console.WriteLine($"Product reloaded successfully: {savedProduct != null}");
                     return savedProduct != null ? MapToDto(savedProduct) : null;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Database save failed: {ex.Message}");
-                    throw new Exception($"Failed to create product: Database save failed: {ex.Message}");
+                    Console.WriteLine($"Inner exception: {ex.InnerException?.Message}");
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                    // Try to get more specific error information
+                    if (ex.InnerException != null)
+                    {
+                        Console.WriteLine($"Inner exception type: {ex.InnerException.GetType().Name}");
+                        Console.WriteLine($"Inner exception details: {ex.InnerException.Message}");
+                    }
+
+                    throw new Exception($"Failed to create product: Database save failed: {ex.Message}. Inner: {ex.InnerException?.Message}");
                 }
             }
             catch (Exception ex)

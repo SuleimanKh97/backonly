@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagementAPI.DTOs;
 using LibraryManagementAPI.Services;
+using LibraryManagementAPI.Data;
 using System.Security.Claims;
 
 namespace LibraryManagementAPI.Controllers
@@ -87,10 +88,12 @@ namespace LibraryManagementAPI.Controllers
                 // Log the full exception for debugging
                 Console.WriteLine($"Product creation error: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                
-                return BadRequest(new { 
-                    message = "An error occurred while creating the product", 
+                Console.WriteLine($"Inner exception: {ex.InnerException?.Message}");
+
+                return BadRequest(new {
+                    message = "An error occurred while creating the product",
                     details = ex.Message,
+                    innerDetails = ex.InnerException?.Message,
                     suggestion = "Please check if the SKU is unique and all referenced IDs (Author, Publisher, Category) exist."
                 });
             }
@@ -245,6 +248,114 @@ namespace LibraryManagementAPI.Controllers
             {
                 Console.WriteLine($"Image upload error: {ex.Message}");
                 return BadRequest(new { message = "An error occurred while uploading the image" });
+            }
+        }
+
+        [HttpPost("validate")]
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> ValidateProductData([FromBody] CreateProductDto createProductDto)
+        {
+            var validationResults = new List<string>();
+
+            try
+            {
+                // Check SKU uniqueness
+                if (!string.IsNullOrEmpty(createProductDto.SKU))
+                {
+                    var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.SKU == createProductDto.SKU);
+                    if (existingProduct != null)
+                    {
+                        validationResults.Add($"SKU '{createProductDto.SKU}' is already in use");
+                    }
+                }
+
+                // Check foreign key references
+                if (createProductDto.AuthorId.HasValue)
+                {
+                    var author = await _context.Authors.FindAsync(createProductDto.AuthorId.Value);
+                    if (author == null)
+                    {
+                        validationResults.Add($"Author with ID {createProductDto.AuthorId.Value} not found");
+                    }
+                }
+
+                if (createProductDto.PublisherId.HasValue)
+                {
+                    var publisher = await _context.Publishers.FindAsync(createProductDto.PublisherId.Value);
+                    if (publisher == null)
+                    {
+                        validationResults.Add($"Publisher with ID {createProductDto.PublisherId.Value} not found");
+                    }
+                }
+
+                if (createProductDto.CategoryId.HasValue)
+                {
+                    var category = await _context.Categories.FindAsync(createProductDto.CategoryId.Value);
+                    if (category == null)
+                    {
+                        validationResults.Add($"Category with ID {createProductDto.CategoryId.Value} not found");
+                    }
+                }
+
+                // Check required fields
+                if (string.IsNullOrWhiteSpace(createProductDto.Title))
+                {
+                    validationResults.Add("Title is required");
+                }
+
+                if (string.IsNullOrWhiteSpace(createProductDto.ProductType))
+                {
+                    validationResults.Add("ProductType is required");
+                }
+
+                return Ok(new
+                {
+                    isValid = validationResults.Count == 0,
+                    validationResults = validationResults,
+                    data = createProductDto
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Validation failed", error = ex.Message });
+            }
+        }
+
+        [HttpGet("reference-data")]
+        public async Task<IActionResult> GetReferenceData()
+        {
+            try
+            {
+                var authors = await _context.Authors
+                    .Where(a => a.IsActive)
+                    .Select(a => new { a.Id, a.Name, a.NameArabic })
+                    .OrderBy(a => a.Name)
+                    .ToListAsync();
+
+                var publishers = await _context.Publishers
+                    .Select(p => new { p.Id, p.Name, p.NameArabic })
+                    .OrderBy(p => p.Name)
+                    .ToListAsync();
+
+                var categories = await _context.Categories
+                    .Where(c => c.IsActive)
+                    .Select(c => new { c.Id, c.Name, c.NameArabic })
+                    .OrderBy(c => c.Name)
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    authors = authors,
+                    publishers = publishers,
+                    categories = categories,
+                    authorsCount = authors.Count,
+                    publishersCount = publishers.Count,
+                    categoriesCount = categories.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to load reference data", error = ex.Message });
             }
         }
 
