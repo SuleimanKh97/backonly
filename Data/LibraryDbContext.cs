@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using LibraryManagementAPI.Models;
+using LibraryManagementAPI.Converters;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 
 namespace LibraryManagementAPI.Data
@@ -33,6 +35,26 @@ namespace LibraryManagementAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Configure DateTime UTC conversion for PostgreSQL compatibility
+            var dateTimeConverter = new DateTimeUtcConverter();
+            var nullableDateTimeConverter = new NullableDateTimeUtcConverter();
+
+            // Apply UTC conversion to all DateTime properties
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                    else if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(nullableDateTimeConverter);
+                    }
+                }
+            }
 
             // Configure Book entity
             modelBuilder.Entity<Book>(entity =>

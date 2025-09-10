@@ -18,11 +18,21 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-// Configure Entity Framework
+// Configure Entity Framework with PostgreSQL DateTime handling
 builder.Services.AddDbContext<LibraryDbContext>(options =>
+{
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        npgsqlOptions => npgsqlOptions
+            .EnableRetryOnFailure(3, TimeSpan.FromSeconds(10), null)
+    );
+
+    // Configure DateTime handling for PostgreSQL compatibility
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+});
+
+// Add DateTime UTC converter globally
+builder.Services.AddSingleton(new DateTimeUtcConverter());
 
 // Configure Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
