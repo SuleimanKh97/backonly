@@ -7,6 +7,7 @@ using System.Text;
 using LibraryManagementAPI.Data;
 using LibraryManagementAPI.Models;
 using LibraryManagementAPI.Services;
+using LibraryManagementAPI.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +32,6 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 });
 
-// Add DateTime UTC converter globally
-builder.Services.AddSingleton(new DateTimeUtcConverter());
 
 // Configure Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
