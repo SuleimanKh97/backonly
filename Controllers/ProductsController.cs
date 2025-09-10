@@ -42,6 +42,24 @@ namespace LibraryManagementAPI.Controllers
         [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto createProductDto)
         {
+            // Debug logging
+            var user = HttpContext.User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userRole = user.FindFirst(ClaimTypes.Role)?.Value;
+            var userName = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            Console.WriteLine($"CreateProduct called by User: {userName}, ID: {userId}, Role: {userRole}, IsAuthenticated: {user.Identity?.IsAuthenticated}");
+
+            if (user.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized(new { message = "User is not authenticated" });
+            }
+
+            if (!user.IsInRole("Admin") && !user.IsInRole("Librarian"))
+            {
+                return Forbid($"User role '{userRole}' is not authorized for this action");
+            }
+
             try
             {
                 if (!ModelState.IsValid)

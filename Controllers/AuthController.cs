@@ -44,6 +44,38 @@ namespace LibraryManagementAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (userId == null)
+                return Unauthorized();
+
+            var user = await _authService.GetUserByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            return Ok(new
+            {
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.Username,
+                Role = userRole,
+                user.IsActive,
+                user.CreatedAt,
+                Claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList(),
+                IsAuthenticated = User.Identity?.IsAuthenticated ?? false,
+                AuthenticationType = User.Identity?.AuthenticationType
+            });
+        }
+
         [HttpPost("register-customer")]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerDto registerDto)
         {

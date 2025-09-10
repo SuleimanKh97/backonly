@@ -20,6 +20,24 @@ namespace LibraryManagementAPI.Controllers
         [HttpGet("stats")]
         public async Task<IActionResult> GetDashboardStats()
         {
+            // Debug logging
+            var user = HttpContext.User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userRole = user.FindFirst(ClaimTypes.Role)?.Value;
+            var userName = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            Console.WriteLine($"GetDashboardStats called by User: {userName}, ID: {userId}, Role: {userRole}, IsAuthenticated: {user.Identity?.IsAuthenticated}");
+
+            if (user.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized(new { message = "User is not authenticated" });
+            }
+
+            if (!user.IsInRole("Admin") && !user.IsInRole("Librarian"))
+            {
+                return Forbid($"User role '{userRole}' is not authorized for this action");
+            }
+
             var stats = await _dashboardService.GetDashboardStatsAsync();
             return Ok(stats);
         }
