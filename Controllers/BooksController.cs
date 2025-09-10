@@ -47,8 +47,8 @@ namespace LibraryManagementAPI.Controllers
                 if (!ModelState.IsValid)
                 {
                     var errors = ModelState
-                        .Where(x => x.Value.Errors.Count > 0)
-                        .Select(x => new { Field = x.Key, Errors = x.Value.Errors.Select(e => e.ErrorMessage) })
+                        .Where(x => x.Value?.Errors.Count > 0)
+                        .Select(x => new { Field = x.Key, Errors = x.Value?.Errors.Select(e => e.ErrorMessage) ?? new List<string>() })
                         .ToList();
                     
                     return BadRequest(new { 

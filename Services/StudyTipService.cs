@@ -153,6 +153,7 @@ namespace LibraryManagementAPI.Services
                 .Select(t => t.Grade)
                 .Where(g => !string.IsNullOrEmpty(g))
                 .Distinct()
+                .Cast<string>()
                 .ToListAsync();
         }
 
@@ -163,6 +164,7 @@ namespace LibraryManagementAPI.Services
                 .Select(t => t.Subject)
                 .Where(s => !string.IsNullOrEmpty(s))
                 .Distinct()
+                .Cast<string>()
                 .ToListAsync();
         }
 

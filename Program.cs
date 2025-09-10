@@ -224,14 +224,14 @@ using (var scope = app.Services.CreateScope())
         }
         catch (Exception dbEx)
         {
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning(dbEx, "Database connection failed. Application will start without database initialization. Error: {Message}", dbEx.Message);
+            var dbLogger = services.GetRequiredService<ILogger<Program>>();
+            dbLogger.LogWarning(dbEx, "Database connection failed. Application will start without database initialization. Error: {Message}", dbEx.Message);
         }
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
+        var seedLogger = services.GetRequiredService<ILogger<Program>>();
+        seedLogger.LogError(ex, "An error occurred while seeding the database.");
     }
 }
 

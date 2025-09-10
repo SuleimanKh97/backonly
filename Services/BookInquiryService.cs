@@ -28,10 +28,10 @@ namespace LibraryManagementAPI.Services
             {
                 var searchTerm = searchDto.SearchTerm.ToLower();
                 query = query.Where(bi =>
-                    bi.CustomerName.ToLower().Contains(searchTerm) ||
-                    bi.CustomerPhone.Contains(searchTerm) ||
+                    (bi.CustomerName != null && bi.CustomerName.ToLower().Contains(searchTerm)) ||
+                    (bi.CustomerPhone != null && bi.CustomerPhone.Contains(searchTerm)) ||
                     (bi.CustomerEmail != null && bi.CustomerEmail.ToLower().Contains(searchTerm)) ||
-                    (bi.Book != null && bi.Book.Title.ToLower().Contains(searchTerm)) ||
+                    (bi.Book != null && bi.Book.Title != null && bi.Book.Title.ToLower().Contains(searchTerm)) ||
                     (bi.Book != null && bi.Book.TitleArabic != null && bi.Book.TitleArabic.ToLower().Contains(searchTerm))
                 );
             }
@@ -207,8 +207,8 @@ namespace LibraryManagementAPI.Services
                 BookAuthor = inquiry.Book?.Author?.Name,
                 BookCoverImageUrl = inquiry.Book?.CoverImageUrl,
                 UserId = inquiry.UserId,
-                CustomerName = inquiry.CustomerName,
-                CustomerPhone = inquiry.CustomerPhone,
+                CustomerName = inquiry.CustomerName ?? "",
+                CustomerPhone = inquiry.CustomerPhone ?? "",
                 CustomerEmail = inquiry.CustomerEmail,
                 Message = inquiry.Message,
                 Status = inquiry.Status.ToString(),

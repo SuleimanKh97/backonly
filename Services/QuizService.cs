@@ -39,10 +39,10 @@ namespace LibraryManagementAPI.Services
             {
                 var searchTerm = filter.SearchTerm.ToLower();
                 query = query.Where(q => 
-                    q.Title.ToLower().Contains(searchTerm) ||
-                    q.TitleArabic.ToLower().Contains(searchTerm) ||
-                    q.Subject.ToLower().Contains(searchTerm) ||
-                    q.Grade.ToLower().Contains(searchTerm));
+                    (q.Title != null && q.Title.ToLower().Contains(searchTerm)) ||
+                    (q.TitleArabic != null && q.TitleArabic.ToLower().Contains(searchTerm)) ||
+                    (q.Subject != null && q.Subject.ToLower().Contains(searchTerm)) ||
+                    (q.Grade != null && q.Grade.ToLower().Contains(searchTerm)));
             }
 
             var totalCount = await query.CountAsync();
