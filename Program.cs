@@ -99,6 +99,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader()
+              .AllowCredentials()
               .WithExposedHeaders("Content-Disposition");
     });
     
@@ -125,6 +126,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader()
+              .AllowCredentials()
               .WithExposedHeaders("Content-Disposition");
     });
 });
@@ -203,6 +205,24 @@ app.UseCors(corsPolicy);
 // Log CORS policy being used
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Using CORS policy: {CorsPolicy} for environment: {Environment}", corsPolicy, app.Environment.EnvironmentName);
+
+// Add CORS debugging middleware
+app.Use(async (context, next) =>
+{
+    // Log preflight requests
+    if (context.Request.Method == "OPTIONS")
+    {
+        logger.LogInformation("CORS Preflight request from: {Origin} to {Path}", context.Request.Headers["Origin"], context.Request.Path);
+    }
+
+    await next();
+
+    // Log CORS headers in response
+    if (context.Response.Headers.ContainsKey("Access-Control-Allow-Origin"))
+    {
+        logger.LogInformation("CORS Response headers applied for {Path}", context.Request.Path);
+    }
+});
 
 // Use Authentication & Authorization
 app.UseAuthentication();
