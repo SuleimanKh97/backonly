@@ -6,6 +6,8 @@ using LibraryManagementAPI.Services;
 using LibraryManagementAPI.Data;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace LibraryManagementAPI.Controllers
 {
@@ -17,13 +19,15 @@ namespace LibraryManagementAPI.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly LibraryDbContext _context;
         private readonly ILogger<ProductsController> _logger;
+        private readonly Cloudinary _cloudinary;
 
-        public ProductsController(IProductService productService, IWebHostEnvironment environment, LibraryDbContext context, ILogger<ProductsController> logger)
+        public ProductsController(IProductService productService, IWebHostEnvironment environment, LibraryDbContext context, ILogger<ProductsController> logger, Cloudinary cloudinary)
         {
             _productService = productService;
             _environment = environment;
             _context = context;
             _logger = logger;
+            _cloudinary = cloudinary;
         }
 
         [HttpGet]
@@ -221,41 +225,36 @@ namespace LibraryManagementAPI.Controllers
                     return BadRequest(new { message = "File size too large. Maximum size is 5MB." });
                 }
 
-                // Ensure uploads directory exists
-                var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads", "products");
-                if (!Directory.Exists(uploadsPath))
+                // Upload to Cloudinary
+                var uploadParams = new ImageUploadParams()
                 {
-                    Directory.CreateDirectory(uploadsPath);
-                }
+                    File = new FileDescription(file.FileName, file.OpenReadStream()),
+                    Folder = "library-products",
+                    Transformation = new Transformation().Width(800).Height(600).Crop("limit").Quality("auto")
+                };
 
-                // Generate unique filename
-                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-                var filePath = Path.Combine(uploadsPath, fileName);
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
-                // Save file
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (uploadResult.Error != null)
                 {
-                    await file.CopyToAsync(stream);
+                    _logger.LogError("Cloudinary upload error: {Error}", uploadResult.Error.Message);
+                    return BadRequest(new { message = "Failed to upload image to cloud storage" });
                 }
-
-                // Return the public URL - Force HTTPS in production
-                var request = HttpContext.Request;
-                var scheme = _environment.IsProduction() ? "https" : request.Scheme;
-                var baseUrl = $"{scheme}://{request.Host}";
-                var imageUrl = $"{baseUrl}/uploads/products/{fileName}";
 
                 // Log the generated URL for debugging
-                _logger.LogInformation("Image uploaded successfully. URL: {ImageUrl}, File: {FileName}", imageUrl, fileName);
+                _logger.LogInformation("Image uploaded to Cloudinary successfully. URL: {ImageUrl}, PublicId: {PublicId}",
+                    uploadResult.SecureUrl.ToString(), uploadResult.PublicId);
 
                 return Ok(new {
                     message = "Image uploaded successfully",
-                    imageUrl = imageUrl,
-                    fileName = fileName
+                    imageUrl = uploadResult.SecureUrl.ToString(),
+                    publicId = uploadResult.PublicId,
+                    fileName = file.FileName
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Image upload error: {ex.Message}");
+                _logger.LogError("Image upload error: {Message}", ex.Message);
                 return BadRequest(new { message = "An error occurred while uploading the image" });
             }
         }
