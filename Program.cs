@@ -8,6 +8,8 @@ using LibraryManagementAPI.Data;
 using LibraryManagementAPI.Models;
 using LibraryManagementAPI.Services;
 using LibraryManagementAPI.Converters;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -222,6 +224,14 @@ app.UseHttpsRedirection();
 
 // Use Static Files for serving uploaded images
 app.UseStaticFiles();
+
+// Configure static files for uploads directory specifically
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
 
 // Use CORS - Must be before UseAuthentication and UseAuthorization
 // Temporarily use AllowAll for production to fix CORS issues

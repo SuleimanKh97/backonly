@@ -5,6 +5,7 @@ using LibraryManagementAPI.DTOs;
 using LibraryManagementAPI.Services;
 using LibraryManagementAPI.Data;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementAPI.Controllers
 {
@@ -15,12 +16,14 @@ namespace LibraryManagementAPI.Controllers
         private readonly IProductService _productService;
         private readonly IWebHostEnvironment _environment;
         private readonly LibraryDbContext _context;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IProductService productService, IWebHostEnvironment environment, LibraryDbContext context)
+        public ProductsController(IProductService productService, IWebHostEnvironment environment, LibraryDbContext context, ILogger<ProductsController> logger)
         {
             _productService = productService;
             _environment = environment;
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -240,9 +243,12 @@ namespace LibraryManagementAPI.Controllers
                 var scheme = _environment.IsProduction() ? "https" : request.Scheme;
                 var baseUrl = $"{scheme}://{request.Host}";
                 var imageUrl = $"{baseUrl}/uploads/products/{fileName}";
-                
-                return Ok(new { 
-                    message = "Image uploaded successfully", 
+
+                // Log the generated URL for debugging
+                _logger.LogInformation("Image uploaded successfully. URL: {ImageUrl}, File: {FileName}", imageUrl, fileName);
+
+                return Ok(new {
+                    message = "Image uploaded successfully",
                     imageUrl = imageUrl,
                     fileName = fileName
                 });
