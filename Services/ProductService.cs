@@ -301,7 +301,10 @@ namespace LibraryManagementAPI.Services
 
         public async Task<ProductDto?> UpdateProductAsync(int id, UpdateProductDto updateProductDto)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (product == null)
                 return null;
 
@@ -328,6 +331,58 @@ namespace LibraryManagementAPI.Services
             product.IsFeatured = updateProductDto.IsFeatured;
             product.IsNewRelease = updateProductDto.IsNewRelease;
             product.UpdatedAt = DateTime.UtcNow;
+
+            // Handle images update
+            if (updateProductDto.Images != null)
+            {
+                // Get existing image IDs
+                var existingImageIds = product.ProductImages.Select(img => img.Id).ToList();
+                var updatedImageIds = updateProductDto.Images
+                    .Where(img => img.Id.HasValue)
+                    .Select(img => img.Id.Value)
+                    .ToList();
+
+                // Remove images that are not in the updated list
+                var imagesToRemove = product.ProductImages
+                    .Where(img => !updatedImageIds.Contains(img.Id))
+                    .ToList();
+
+                foreach (var imageToRemove in imagesToRemove)
+                {
+                    _context.ProductImages.Remove(imageToRemove);
+                }
+
+                // Update existing images
+                foreach (var updateImageDto in updateProductDto.Images.Where(img => img.Id.HasValue))
+                {
+                    var existingImage = product.ProductImages
+                        .FirstOrDefault(img => img.Id == updateImageDto.Id);
+
+                    if (existingImage != null)
+                    {
+                        existingImage.ImageUrl = updateImageDto.ImageUrl;
+                        existingImage.ImageType = updateImageDto.ImageType;
+                        existingImage.DisplayOrder = updateImageDto.DisplayOrder;
+                        existingImage.IsActive = updateImageDto.IsActive;
+                    }
+                }
+
+                // Add new images
+                var newImages = updateProductDto.Images.Where(img => !img.Id.HasValue).ToList();
+                foreach (var newImageDto in newImages)
+                {
+                    var newImage = new ProductImage
+                    {
+                        ProductId = product.Id,
+                        ImageUrl = newImageDto.ImageUrl,
+                        ImageType = newImageDto.ImageType,
+                        DisplayOrder = newImageDto.DisplayOrder,
+                        IsActive = newImageDto.IsActive,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.ProductImages.Add(newImage);
+                }
+            }
 
             await _context.SaveChangesAsync();
 

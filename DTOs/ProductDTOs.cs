@@ -147,6 +147,8 @@ namespace LibraryManagementAPI.DTOs
         public bool IsFeatured { get; set; } = false;
 
         public bool IsNewRelease { get; set; } = false;
+
+        public List<UpdateProductImageDto>? Images { get; set; }
     }
 
     public class ProductSearchDto
@@ -190,6 +192,22 @@ namespace LibraryManagementAPI.DTOs
         [StringLength(500)]
         public string ImageUrl { get; set; } = string.Empty;
 
+        public string ImageType { get; set; } = "Gallery";
+
+        public int DisplayOrder { get; set; } = 0;
+
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class UpdateProductImageDto
+    {
+        public int? Id { get; set; } // For existing images
+
+        [Required]
+        [StringLength(500)]
+        public string ImageUrl { get; set; } = string.Empty;
+
+        [StringLength(50)]
         public string ImageType { get; set; } = "Gallery";
 
         public int DisplayOrder { get; set; } = 0;
