@@ -502,5 +502,105 @@ namespace LibraryManagementAPI.Controllers
 
             return Ok(subjects);
         }
+
+        [HttpGet("missing-images")]
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> GetProductsWithMissingImages()
+        {
+            try
+            {
+                var products = await _context.Products
+                    .Include(p => p.ProductImages)
+                    .ToListAsync();
+
+                var productsWithMissingImages = new List<object>();
+                var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(5); // Short timeout for checking URLs
+
+                foreach (var product in products)
+                {
+                    var hasMissingImages = false;
+                    var missingImageUrls = new List<string>();
+
+                    // Check cover image URL
+                    if (!string.IsNullOrEmpty(product.CoverImageUrl))
+                    {
+                        try
+                        {
+                            var response = await httpClient.GetAsync(product.CoverImageUrl);
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                hasMissingImages = true;
+                                missingImageUrls.Add(product.CoverImageUrl);
+                            }
+                        }
+                        catch
+                        {
+                            hasMissingImages = true;
+                            missingImageUrls.Add(product.CoverImageUrl);
+                        }
+                    }
+
+                    // Check product images
+                    if (product.ProductImages != null)
+                    {
+                        foreach (var image in product.ProductImages)
+                        {
+                            if (!string.IsNullOrEmpty(image.ImageUrl))
+                            {
+                                try
+                                {
+                                    var response = await httpClient.GetAsync(image.ImageUrl);
+                                    if (!response.IsSuccessStatusCode)
+                                    {
+                                        hasMissingImages = true;
+                                        missingImageUrls.Add(image.ImageUrl);
+                                    }
+                                }
+                                catch
+                                {
+                                    hasMissingImages = true;
+                                    missingImageUrls.Add(image.ImageUrl);
+                                }
+                            }
+                        }
+                    }
+
+                    // If product has no images at all
+                    var hasNoImages = string.IsNullOrEmpty(product.CoverImageUrl) &&
+                                    (product.ProductImages == null || product.ProductImages.Count == 0);
+
+                    if (hasMissingImages || hasNoImages)
+                    {
+                        productsWithMissingImages.Add(new
+                        {
+                            product.Id,
+                            product.Title,
+                            product.TitleArabic,
+                            product.SKU,
+                            product.ProductType,
+                            product.CoverImageUrl,
+                            product.ProductImages,
+                            hasNoImages = hasNoImages,
+                            missingImageUrls = missingImageUrls,
+                            totalImages = (product.ProductImages?.Count ?? 0) + (string.IsNullOrEmpty(product.CoverImageUrl) ? 0 : 1),
+                            missingImagesCount = missingImageUrls.Count
+                        });
+                    }
+                }
+
+                return Ok(new
+                {
+                    totalProducts = products.Count,
+                    productsWithMissingImages = productsWithMissingImages.Count,
+                    products = productsWithMissingImages
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error checking for missing images: {Message}", ex.Message);
+                return BadRequest(new { message = "Failed to check for missing images", error = ex.Message });
+            }
+        }
     }
 }

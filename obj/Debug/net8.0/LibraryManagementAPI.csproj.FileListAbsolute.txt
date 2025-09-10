@@ -923,3 +923,10 @@ C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publis
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\CloudinaryDotNet.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\wwwroot\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\appsettings.Development.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\appsettings.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\LibraryManagementAPI.deps.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\bin\Debug\net8.0\publish\publish\publish\railway.json
