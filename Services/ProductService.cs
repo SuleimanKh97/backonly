@@ -346,7 +346,7 @@ namespace LibraryManagementAPI.Services
                 var existingImageIds = product.ProductImages.Select(img => img.Id).ToList();
                 var updatedImageIds = updateProductDto.Images
                     .Where(img => img.Id.HasValue)
-                    .Select(img => img.Id.Value)
+                    .Select(img => img.Id!.Value)
                     .ToList();
 
                 // Remove images that are not in the updated list
@@ -391,11 +391,36 @@ namespace LibraryManagementAPI.Services
                 }
             }
 
+            // Log product state before save
+            Console.WriteLine($"Before SaveChanges - Product state:");
+            Console.WriteLine($"  Title: '{product.Title}'");
+            Console.WriteLine($"  TitleArabic: '{product.TitleArabic}'");
+            Console.WriteLine($"  Entity State: {_context.Entry(product).State}");
+
             var saveResult = await _context.SaveChangesAsync();
             Console.WriteLine($"SaveChanges result: {saveResult} changes saved");
 
+            // Check entity state after save
+            Console.WriteLine($"After SaveChanges - Entity State: {_context.Entry(product).State}");
+
+            // Query the database directly to verify
+            var directFromDb = await _context.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (directFromDb != null)
+            {
+                Console.WriteLine($"Direct from DB after save:");
+                Console.WriteLine($"  Title: '{directFromDb.Title}'");
+                Console.WriteLine($"  TitleArabic: '{directFromDb.TitleArabic}'");
+            }
+            else
+            {
+                Console.WriteLine("ERROR: Product not found in database after save!");
+            }
+
             var updatedProduct = await GetProductByIdAsync(id);
-            Console.WriteLine($"Updated product from DB:");
+            Console.WriteLine($"Updated product from GetProductByIdAsync:");
             Console.WriteLine($"  Title: {updatedProduct?.Title}");
             Console.WriteLine($"  TitleArabic: {updatedProduct?.TitleArabic}");
 
