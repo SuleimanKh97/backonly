@@ -294,6 +294,9 @@ using (var scope = app.Services.CreateScope())
                 // Run the migration synchronously and wait for completion
                 await context.Database.MigrateAsync();
                 dbLogger.LogInformation("✅ Database migration completed successfully!");
+
+                // Fix existing HTTP URLs to HTTPS
+                await FixImageUrlsToHttpsAsync(context, dbLogger);
             }
             catch (Exception migEx)
             {
@@ -310,6 +313,9 @@ using (var scope = app.Services.CreateScope())
             // Seed admin user
             await SeedAdminUserAsync(userManager);
             dbLogger.LogInformation("👤 Admin user seeded successfully!");
+
+            // Fix existing HTTP URLs to HTTPS
+            await FixImageUrlsToHttpsAsync(context, dbLogger);
 
             dbLogger.LogInformation("🎉 Database setup completed successfully!");
         }
@@ -342,6 +348,80 @@ static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole(role));
         }
+    }
+}
+
+static async Task FixImageUrlsToHttpsAsync(LibraryDbContext context, ILogger logger)
+{
+    try
+    {
+        logger.LogInformation("🔄 Checking for HTTP URLs to convert to HTTPS...");
+
+        // Fix Books table HTTP URLs
+        var booksWithHttpUrls = await context.Books
+            .Where(b => b.CoverImageUrl != null && b.CoverImageUrl.StartsWith("http://"))
+            .ToListAsync();
+
+        if (booksWithHttpUrls.Any())
+        {
+            foreach (var book in booksWithHttpUrls)
+            {
+                book.CoverImageUrl = book.CoverImageUrl!.Replace("http://", "https://");
+            }
+            await context.SaveChangesAsync();
+            logger.LogInformation($"✅ Fixed {booksWithHttpUrls.Count} book image URLs from HTTP to HTTPS");
+        }
+
+        // Fix Products table HTTP URLs
+        var productsWithHttpUrls = await context.Products
+            .Where(p => p.CoverImageUrl != null && p.CoverImageUrl.StartsWith("http://"))
+            .ToListAsync();
+
+        if (productsWithHttpUrls.Any())
+        {
+            foreach (var product in productsWithHttpUrls)
+            {
+                product.CoverImageUrl = product.CoverImageUrl!.Replace("http://", "https://");
+            }
+            await context.SaveChangesAsync();
+            logger.LogInformation($"✅ Fixed {productsWithHttpUrls.Count} product image URLs from HTTP to HTTPS");
+        }
+
+        // Fix BookImages table HTTP URLs
+        var bookImagesWithHttpUrls = await context.BookImages
+            .Where(bi => bi.ImageUrl != null && bi.ImageUrl.StartsWith("http://"))
+            .ToListAsync();
+
+        if (bookImagesWithHttpUrls.Any())
+        {
+            foreach (var bookImage in bookImagesWithHttpUrls)
+            {
+                bookImage.ImageUrl = bookImage.ImageUrl!.Replace("http://", "https://");
+            }
+            await context.SaveChangesAsync();
+            logger.LogInformation($"✅ Fixed {bookImagesWithHttpUrls.Count} book gallery image URLs from HTTP to HTTPS");
+        }
+
+        // Fix ProductImages table HTTP URLs
+        var productImagesWithHttpUrls = await context.ProductImages
+            .Where(pi => pi.ImageUrl != null && pi.ImageUrl.StartsWith("http://"))
+            .ToListAsync();
+
+        if (productImagesWithHttpUrls.Any())
+        {
+            foreach (var productImage in productImagesWithHttpUrls)
+            {
+                productImage.ImageUrl = productImage.ImageUrl!.Replace("http://", "https://");
+            }
+            await context.SaveChangesAsync();
+            logger.LogInformation($"✅ Fixed {productImagesWithHttpUrls.Count} product gallery image URLs from HTTP to HTTPS");
+        }
+
+        logger.LogInformation("🎉 URL fixing completed successfully!");
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "Failed to fix HTTP URLs to HTTPS: {Message}", ex.Message);
     }
 }
 

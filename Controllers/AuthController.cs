@@ -44,6 +44,22 @@ namespace LibraryManagementAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("debug-auth")]
+        public IActionResult DebugAuth()
+        {
+            var user = HttpContext.User;
+            return Ok(new
+            {
+                IsAuthenticated = user.Identity?.IsAuthenticated ?? false,
+                AuthenticationType = user.Identity?.AuthenticationType,
+                Name = user.Identity?.Name,
+                Claims = user.Claims.Select(c => new { c.Type, c.Value }).ToList(),
+                Headers = HttpContext.Request.Headers
+                    .Where(h => h.Key.ToLower().Contains("auth") || h.Key.ToLower().Contains("token"))
+                    .ToDictionary(h => h.Key, h => h.Value.ToString())
+            });
+        }
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
