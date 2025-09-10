@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using LibraryManagementAPI.DTOs;
 using LibraryManagementAPI.Services;
 using LibraryManagementAPI.Data;
@@ -13,11 +14,13 @@ namespace LibraryManagementAPI.Controllers
     {
         private readonly IProductService _productService;
         private readonly IWebHostEnvironment _environment;
+        private readonly LibraryDbContext _context;
 
-        public ProductsController(IProductService productService, IWebHostEnvironment environment)
+        public ProductsController(IProductService productService, IWebHostEnvironment environment, LibraryDbContext context)
         {
             _productService = productService;
             _environment = environment;
+            _context = context;
         }
 
         [HttpGet]
@@ -343,14 +346,18 @@ namespace LibraryManagementAPI.Controllers
                     .OrderBy(c => c.Name)
                     .ToListAsync();
 
+                var authorsCount = authors.Count();
+                var publishersCount = publishers.Count();
+                var categoriesCount = categories.Count();
+
                 return Ok(new
                 {
                     authors = authors,
                     publishers = publishers,
                     categories = categories,
-                    authorsCount = authors.Count,
-                    publishersCount = publishers.Count,
-                    categoriesCount = categories.Count
+                    authorsCount = authorsCount,
+                    publishersCount = publishersCount,
+                    categoriesCount = categoriesCount
                 });
             }
             catch (Exception ex)
