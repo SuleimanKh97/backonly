@@ -378,7 +378,7 @@ static async Task ExecuteManualMigrationAsync(LibraryDbContext context, ILogger 
     {
         logger.LogInformation("🔧 Executing manual SQL migration for Products table...");
 
-        // Create Products table
+        // Step 1: Create Products table
         await context.Database.ExecuteSqlRawAsync(@"
             CREATE TABLE IF NOT EXISTS ""Products"" (
                 ""Id"" SERIAL PRIMARY KEY,
@@ -410,8 +410,9 @@ static async Task ExecuteManualMigrationAsync(LibraryDbContext context, ILogger 
                 ""UpdatedAt"" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
         ");
+        logger.LogInformation("📋 Products table created/verified");
 
-        // Create ProductImages table
+        // Step 2: Create ProductImages table
         await context.Database.ExecuteSqlRawAsync(@"
             CREATE TABLE IF NOT EXISTS ""ProductImages"" (
                 ""Id"" SERIAL PRIMARY KEY,
@@ -423,29 +424,69 @@ static async Task ExecuteManualMigrationAsync(LibraryDbContext context, ILogger 
                 ""CreatedAt"" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
         ");
+        logger.LogInformation("📋 ProductImages table created/verified");
 
-        // Add foreign key constraints
-        await context.Database.ExecuteSqlRawAsync(@"
-            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Authors_AuthorId""
-                FOREIGN KEY (""AuthorId"") REFERENCES ""Authors"" (""Id"") ON DELETE SET NULL;
+        // Step 3: Add foreign key constraints (simplified approach)
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""Products"" ADD CONSTRAINT ""FK_Products_Authors_AuthorId""
+                    FOREIGN KEY (""AuthorId"") REFERENCES ""Authors"" (""Id"") ON DELETE SET NULL;
+            ");
+            logger.LogInformation("🔗 Added FK: Products.AuthorId");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("FK Products.AuthorId may already exist: {Message}", ex.Message);
+        }
 
-            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Categories_CategoryId""
-                FOREIGN KEY (""CategoryId"") REFERENCES ""Categories"" (""Id"") ON DELETE SET NULL;
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""Products"" ADD CONSTRAINT ""FK_Products_Categories_CategoryId""
+                    FOREIGN KEY (""CategoryId"") REFERENCES ""Categories"" (""Id"") ON DELETE SET NULL;
+            ");
+            logger.LogInformation("🔗 Added FK: Products.CategoryId");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("FK Products.CategoryId may already exist: {Message}", ex.Message);
+        }
 
-            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Publishers_PublisherId""
-                FOREIGN KEY (""PublisherId"") REFERENCES ""Publishers"" (""Id"") ON DELETE SET NULL;
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""Products"" ADD CONSTRAINT ""FK_Products_Publishers_PublisherId""
+                    FOREIGN KEY (""PublisherId"") REFERENCES ""Publishers"" (""Id"") ON DELETE SET NULL;
+            ");
+            logger.LogInformation("🔗 Added FK: Products.PublisherId");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("FK Products.PublisherId may already exist: {Message}", ex.Message);
+        }
 
-            ALTER TABLE ""ProductImages"" ADD CONSTRAINT IF NOT EXISTS ""FK_ProductImages_Products_ProductId""
-                FOREIGN KEY (""ProductId"") REFERENCES ""Products"" (""Id"") ON DELETE CASCADE;
-        ");
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+                ALTER TABLE ""ProductImages"" ADD CONSTRAINT ""FK_ProductImages_Products_ProductId""
+                    FOREIGN KEY (""ProductId"") REFERENCES ""Products"" (""Id"") ON DELETE CASCADE;
+            ");
+            logger.LogInformation("🔗 Added FK: ProductImages.ProductId");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("FK ProductImages.ProductId may already exist: {Message}", ex.Message);
+        }
 
-        // Add indexes
+        // Step 4: Add indexes
         await context.Database.ExecuteSqlRawAsync(@"
             CREATE INDEX IF NOT EXISTS ""IX_Products_IsAvailable"" ON ""Products"" (""IsAvailable"");
             CREATE INDEX IF NOT EXISTS ""IX_Products_IsFeatured"" ON ""Products"" (""IsFeatured"");
             CREATE INDEX IF NOT EXISTS ""IX_Products_IsNewRelease"" ON ""Products"" (""IsNewRelease"");
             CREATE INDEX IF NOT EXISTS ""IX_ProductImages_ProductId"" ON ""ProductImages"" (""ProductId"");
         ");
+        logger.LogInformation("📊 Indexes created/verified");
 
         logger.LogInformation("✅ Manual SQL migration completed successfully!");
     }
