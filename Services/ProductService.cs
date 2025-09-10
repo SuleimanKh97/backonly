@@ -316,6 +316,7 @@ namespace LibraryManagementAPI.Services
             Console.WriteLine($"  New TitleArabic: {updateProductDto.TitleArabic}");
 
             // Update properties
+            Console.WriteLine($"Setting product properties...");
             product.Title = updateProductDto.Title;
             product.TitleArabic = updateProductDto.TitleArabic;
             product.SKU = updateProductDto.SKU;
@@ -338,6 +339,15 @@ namespace LibraryManagementAPI.Services
             product.IsFeatured = updateProductDto.IsFeatured;
             product.IsNewRelease = updateProductDto.IsNewRelease;
             product.UpdatedAt = DateTime.UtcNow;
+
+            Console.WriteLine($"After setting properties:");
+            Console.WriteLine($"  Title: '{product.Title}'");
+            Console.WriteLine($"  TitleArabic: '{product.TitleArabic}'");
+            Console.WriteLine($"  Entity state: {_context.Entry(product).State}");
+
+            // Mark entity as modified explicitly
+            _context.Entry(product).State = EntityState.Modified;
+            Console.WriteLine($"After marking as Modified: {_context.Entry(product).State}");
 
             // Handle images update
             if (updateProductDto.Images != null)
@@ -397,8 +407,18 @@ namespace LibraryManagementAPI.Services
             Console.WriteLine($"  TitleArabic: '{product.TitleArabic}'");
             Console.WriteLine($"  Entity State: {_context.Entry(product).State}");
 
-            var saveResult = await _context.SaveChangesAsync();
-            Console.WriteLine($"SaveChanges result: {saveResult} changes saved");
+            try
+            {
+                var saveResult = await _context.SaveChangesAsync();
+                Console.WriteLine($"SaveChanges result: {saveResult} changes saved");
+            }
+            catch (Exception saveEx)
+            {
+                Console.WriteLine($"ERROR during SaveChanges: {saveEx.Message}");
+                Console.WriteLine($"Inner exception: {saveEx.InnerException?.Message}");
+                Console.WriteLine($"Stack trace: {saveEx.StackTrace}");
+                throw; // Re-throw to see the error in logs
+            }
 
             // Check entity state after save
             Console.WriteLine($"After SaveChanges - Entity State: {_context.Entry(product).State}");
