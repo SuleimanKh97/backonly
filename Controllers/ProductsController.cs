@@ -225,6 +225,45 @@ namespace LibraryManagementAPI.Controllers
                     return BadRequest(new { message = "File size too large. Maximum size is 5MB." });
                 }
 
+                // Check if Cloudinary is configured
+                if (_cloudinary == null)
+                {
+                    // Fallback to local storage
+                    _logger.LogWarning("Cloudinary not configured, using local storage");
+
+                    // Ensure uploads directory exists
+                    var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads", "products");
+                    if (!Directory.Exists(uploadsPath))
+                    {
+                        Directory.CreateDirectory(uploadsPath);
+                    }
+
+                    // Generate unique filename
+                    var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+                    var filePath = Path.Combine(uploadsPath, fileName);
+
+                    // Save file
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Return the public URL - Force HTTPS in production
+                    var request = HttpContext.Request;
+                    var scheme = _environment.IsProduction() ? "https" : request.Scheme;
+                    var baseUrl = $"{scheme}://{request.Host}";
+                    var imageUrl = $"{baseUrl}/uploads/products/{fileName}";
+
+                    // Log the generated URL for debugging
+                    _logger.LogInformation("Image uploaded to local storage successfully. URL: {ImageUrl}, File: {FileName}", imageUrl, fileName);
+
+                    return Ok(new {
+                        message = "Image uploaded successfully (local storage)",
+                        imageUrl = imageUrl,
+                        fileName = fileName
+                    });
+                }
+
                 // Upload to Cloudinary
                 var uploadParams = new ImageUploadParams()
                 {
@@ -246,7 +285,7 @@ namespace LibraryManagementAPI.Controllers
                     uploadResult.SecureUrl.ToString(), uploadResult.PublicId);
 
                 return Ok(new {
-                    message = "Image uploaded successfully",
+                    message = "Image uploaded successfully (Cloudinary)",
                     imageUrl = uploadResult.SecureUrl.ToString(),
                     publicId = uploadResult.PublicId,
                     fileName = file.FileName

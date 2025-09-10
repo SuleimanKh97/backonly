@@ -224,21 +224,36 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configure Cloudinary
+// Configure Cloudinary (optional for initial deployment)
 var cloudName = builder.Configuration["Cloudinary:CloudName"];
 var apiKey = builder.Configuration["Cloudinary:ApiKey"];
 var apiSecret = builder.Configuration["Cloudinary:ApiSecret"];
 
-if (string.IsNullOrEmpty(cloudName) || string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(apiSecret))
+if (!string.IsNullOrEmpty(cloudName) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(apiSecret))
 {
-    throw new InvalidOperationException("Cloudinary configuration is missing. Please set Cloudinary:CloudName, Cloudinary:ApiKey, and Cloudinary:ApiSecret in appsettings.json or environment variables.");
+    // Cloudinary is configured, set it up
+    var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
+    var cloudinary = new Cloudinary(cloudinaryAccount);
+    builder.Services.AddSingleton(cloudinary);
+}
+else
+{
+    // Cloudinary not configured - app will use local storage fallback
+    builder.Services.AddSingleton<Cloudinary>(serviceProvider => null!);
 }
 
-var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
-var cloudinary = new Cloudinary(cloudinaryAccount);
-builder.Services.AddSingleton(cloudinary);
-
 var app = builder.Build();
+
+// Log Cloudinary status after app is built
+var cloudinaryLogger = app.Services.GetRequiredService<ILogger<Program>>();
+if (!string.IsNullOrEmpty(cloudName) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(apiSecret))
+{
+    cloudinaryLogger.LogInformation("Cloudinary configured successfully for cloud image storage");
+}
+else
+{
+    cloudinaryLogger.LogWarning("Cloudinary not configured. Image uploads will use local storage (not recommended for production)");
+}
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

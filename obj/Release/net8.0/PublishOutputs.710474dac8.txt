@@ -1,4 +1,6 @@
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\LibraryManagementAPI.exe
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\web.config
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\wwwroot\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\wwwroot\web.config
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\appsettings.Development.json
@@ -7,12 +9,18 @@ C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\appsett
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\appsettings.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\LibraryManagementAPI.deps.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\appsettings.Development.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\appsettings.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\LibraryManagementAPI.deps.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\LibraryManagementAPI.runtimeconfig.json
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\railway.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\LibraryManagementAPI.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\LibraryManagementAPI.runtimeconfig.json
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\LibraryManagementAPI.pdb
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\BCrypt.Net-Next.dll
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\CloudinaryDotNet.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -39,6 +47,7 @@ C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.Ident
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.IdentityModel.Tokens.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Microsoft.OpenApi.dll
+C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Newtonsoft.Json.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Npgsql.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\ENG.K\Desktop\Work\royalfront and back\backonly\publish\Swashbuckle.AspNetCore.Swagger.dll
