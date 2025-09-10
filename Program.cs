@@ -199,6 +199,75 @@ logger.LogInformation("Using CORS policy: {CorsPolicy} for environment: {Environ
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Add migration endpoint for manual migration
+app.MapPost("/api/admin/migrate", async (LibraryDbContext context, ILogger<Program> logger) =>
+{
+    try
+    {
+        logger.LogInformation("🔧 Manual migration endpoint called");
+
+        // First try EF migration
+        try
+        {
+            await context.Database.MigrateAsync();
+            logger.LogInformation("✅ EF migration completed successfully");
+        }
+        catch (Exception efEx)
+        {
+            logger.LogWarning(efEx, "EF migration failed, trying manual SQL migration");
+
+            // Fallback to manual SQL migration
+            await ExecuteManualMigrationAsync(context, logger);
+        }
+
+        return Results.Ok(new {
+            message = "Migration completed successfully",
+            timestamp = DateTime.UtcNow,
+            method = "EF + Manual SQL"
+        });
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Manual migration failed: {Message}", ex.Message);
+        return Results.Problem($"Migration failed: {ex.Message}", statusCode: 500);
+    }
+})
+.RequireAuthorization(policy => policy.RequireRole("Admin"));
+
+// Add health check endpoint to verify Products table
+app.MapGet("/api/health/database", async (LibraryDbContext context) =>
+{
+    try
+    {
+        // Check if Products table exists
+        var productTableExists = false;
+        try
+        {
+            await context.Database.ExecuteSqlRawAsync("SELECT 1 FROM \"Products\" LIMIT 1");
+            productTableExists = true;
+        }
+        catch { /* Table doesn't exist */ }
+
+        // Get basic stats
+        var bookCount = await context.Books.CountAsync();
+        var categoryCount = await context.Categories.CountAsync();
+
+        return Results.Ok(new
+        {
+            status = "healthy",
+            database = "connected",
+            productsTable = productTableExists ? "exists" : "missing",
+            books = bookCount,
+            categories = categoryCount,
+            timestamp = DateTime.UtcNow
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Database health check failed: {ex.Message}", statusCode: 503);
+    }
+});
+
 app.MapControllers();
 
 // Initialize database and seed data
@@ -213,19 +282,44 @@ using (var scope = app.Services.CreateScope())
 
         try
         {
-            // Apply migrations
-            await context.Database.MigrateAsync();
+            // Apply migrations with detailed logging - BLOCKING UNTIL COMPLETE
+            var dbLogger = services.GetRequiredService<ILogger<Program>>();
+            dbLogger.LogInformation("🚀 Starting database migration...");
+
+            // Always run migration to ensure Products table exists
+            dbLogger.LogInformation("📋 Running database migration to ensure all tables exist...");
+
+            try
+            {
+                // Run the migration synchronously and wait for completion
+                await context.Database.MigrateAsync();
+                dbLogger.LogInformation("✅ Database migration completed successfully!");
+            }
+            catch (Exception migEx)
+            {
+                dbLogger.LogWarning(migEx, "EF Migration failed, attempting manual SQL migration...");
+
+                // Fallback: Execute manual SQL migration
+                await ExecuteManualMigrationAsync(context, dbLogger);
+            }
 
             // Seed roles
             await SeedRolesAsync(roleManager);
+            dbLogger.LogInformation("👥 Roles seeded successfully!");
 
             // Seed admin user
             await SeedAdminUserAsync(userManager);
+            dbLogger.LogInformation("👤 Admin user seeded successfully!");
+
+            dbLogger.LogInformation("🎉 Database setup completed successfully!");
         }
         catch (Exception dbEx)
         {
             var dbLogger = services.GetRequiredService<ILogger<Program>>();
-            dbLogger.LogWarning(dbEx, "Database connection failed. Application will start without database initialization. Error: {Message}", dbEx.Message);
+            dbLogger.LogError(dbEx, "Database migration/seed failed. Error: {Message}. StackTrace: {StackTrace}", dbEx.Message, dbEx.StackTrace);
+
+            // Don't fail the application startup, just log the error
+            dbLogger.LogWarning("Application will continue without database initialization.");
         }
     }
     catch (Exception ex)
@@ -275,6 +369,90 @@ static async Task SeedAdminUserAsync(UserManager<User> userManager)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
+    }
+}
+
+static async Task ExecuteManualMigrationAsync(LibraryDbContext context, ILogger logger)
+{
+    try
+    {
+        logger.LogInformation("🔧 Executing manual SQL migration for Products table...");
+
+        // Create Products table
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE TABLE IF NOT EXISTS ""Products"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""Title"" VARCHAR(200) NOT NULL,
+                ""TitleArabic"" VARCHAR(200),
+                ""SKU"" VARCHAR(20),
+                ""Description"" TEXT,
+                ""DescriptionArabic"" TEXT,
+                ""ProductType"" VARCHAR(50) NOT NULL DEFAULT 'Book',
+                ""AuthorId"" INTEGER,
+                ""PublisherId"" INTEGER,
+                ""CategoryId"" INTEGER,
+                ""Grade"" VARCHAR(50),
+                ""Subject"" VARCHAR(50),
+                ""PublicationDate"" TIMESTAMP WITH TIME ZONE,
+                ""Pages"" INTEGER,
+                ""Language"" VARCHAR(20) NOT NULL DEFAULT 'Arabic',
+                ""Price"" DECIMAL(10,2),
+                ""OriginalPrice"" DECIMAL(10,2),
+                ""StockQuantity"" INTEGER NOT NULL DEFAULT 0,
+                ""CoverImageUrl"" VARCHAR(500),
+                ""IsAvailable"" BOOLEAN NOT NULL DEFAULT TRUE,
+                ""IsFeatured"" BOOLEAN NOT NULL DEFAULT FALSE,
+                ""IsNewRelease"" BOOLEAN NOT NULL DEFAULT FALSE,
+                ""Rating"" DECIMAL(3,2) NOT NULL DEFAULT 0.0,
+                ""RatingCount"" INTEGER NOT NULL DEFAULT 0,
+                ""ViewCount"" INTEGER NOT NULL DEFAULT 0,
+                ""CreatedAt"" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                ""UpdatedAt"" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+        ");
+
+        // Create ProductImages table
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE TABLE IF NOT EXISTS ""ProductImages"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""ProductId"" INTEGER NOT NULL,
+                ""ImageUrl"" VARCHAR(500) NOT NULL,
+                ""ImageType"" VARCHAR(50) NOT NULL DEFAULT 'Gallery',
+                ""DisplayOrder"" INTEGER NOT NULL DEFAULT 0,
+                ""IsActive"" BOOLEAN NOT NULL DEFAULT TRUE,
+                ""CreatedAt"" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+        ");
+
+        // Add foreign key constraints
+        await context.Database.ExecuteSqlRawAsync(@"
+            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Authors_AuthorId""
+                FOREIGN KEY (""AuthorId"") REFERENCES ""Authors"" (""Id"") ON DELETE SET NULL;
+
+            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Categories_CategoryId""
+                FOREIGN KEY (""CategoryId"") REFERENCES ""Categories"" (""Id"") ON DELETE SET NULL;
+
+            ALTER TABLE ""Products"" ADD CONSTRAINT IF NOT EXISTS ""FK_Products_Publishers_PublisherId""
+                FOREIGN KEY (""PublisherId"") REFERENCES ""Publishers"" (""Id"") ON DELETE SET NULL;
+
+            ALTER TABLE ""ProductImages"" ADD CONSTRAINT IF NOT EXISTS ""FK_ProductImages_Products_ProductId""
+                FOREIGN KEY (""ProductId"") REFERENCES ""Products"" (""Id"") ON DELETE CASCADE;
+        ");
+
+        // Add indexes
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE INDEX IF NOT EXISTS ""IX_Products_IsAvailable"" ON ""Products"" (""IsAvailable"");
+            CREATE INDEX IF NOT EXISTS ""IX_Products_IsFeatured"" ON ""Products"" (""IsFeatured"");
+            CREATE INDEX IF NOT EXISTS ""IX_Products_IsNewRelease"" ON ""Products"" (""IsNewRelease"");
+            CREATE INDEX IF NOT EXISTS ""IX_ProductImages_ProductId"" ON ""ProductImages"" (""ProductId"");
+        ");
+
+        logger.LogInformation("✅ Manual SQL migration completed successfully!");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Manual SQL migration failed: {Message}", ex.Message);
+        throw; // Re-throw to let the application know migration failed
     }
 }
 

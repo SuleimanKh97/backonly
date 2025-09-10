@@ -210,9 +210,10 @@ namespace LibraryManagementAPI.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                // Return the public URL
+                // Return the public URL - Force HTTPS in production
                 var request = HttpContext.Request;
-                var baseUrl = $"{request.Scheme}://{request.Host}";
+                var scheme = _environment.IsProduction() ? "https" : request.Scheme;
+                var baseUrl = $"{scheme}://{request.Host}";
                 var imageUrl = $"{baseUrl}/uploads/products/{fileName}";
                 
                 return Ok(new { 
